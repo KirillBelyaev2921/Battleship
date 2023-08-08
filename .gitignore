@@ -1,7 +1,9 @@
 ### IntelliJ IDEA ###
+.idea/workspace.xml
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
+Battleship.iml
 
 ### Eclipse ###
 .apt_generated
