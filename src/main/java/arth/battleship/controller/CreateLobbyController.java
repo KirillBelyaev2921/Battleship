@@ -3,24 +3,18 @@ package arth.battleship.controller;
 import arth.battleship.connection.HostPlayerConnection;
 import arth.battleship.connection.PlayerConnection;
 import arth.battleship.gui.BattleshipFrame;
-import arth.battleship.gui.CreateLobbyPanel;
+import arth.battleship.gui.PlaceShipsPanel;
 
-public class MainMenuController {
+public class CreateLobbyController {
     BattleshipFrame frame;
 
-    public MainMenuController() {
+    public CreateLobbyController() {
         this.frame = BattleshipFrame.getInstance();
     }
 
-    public void createLobby() {
-        frame.setMainPanel(new CreateLobbyPanel());
-    }
-
-    public void chooseLobby() {
+    public void createLobby(String text) {
+        HostPlayerConnection host = new HostPlayerConnection();
         PlayerConnection player = new PlayerConnection();
-    }
-
-    public void exit() {
-        System.exit(1);
+        frame.setMainPanel(new PlaceShipsPanel());
     }
 }

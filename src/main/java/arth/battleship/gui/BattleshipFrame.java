@@ -19,6 +19,7 @@ public class BattleshipFrame extends JFrame {
     }
 
     public void setMainPanel(JPanel panel) {
+        frame.getContentPane().removeAll();
         frame.getContentPane().add(panel);
         frame.pack();
     }

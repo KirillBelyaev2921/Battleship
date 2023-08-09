@@ -5,14 +5,14 @@ import arth.battleship.controller.MainMenuController;
 import javax.swing.*;
 
 public class MainMenuPanel extends JPanel {
-
-    MainMenuController controller;
-    JButton createLobby;
-    JButton joinLobby;
-    JButton exit;
+    private MainMenuController controller;
+    private JButton createLobby;
+    private JButton joinLobby;
+    private JButton exit;
 
     public MainMenuPanel() {
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        this.setBorder(BorderFactory.createEmptyBorder(100, 100, 100, 100));
         controller = new MainMenuController();
 
         createLobby = new JButton("Create lobby");
@@ -28,6 +28,4 @@ public class MainMenuPanel extends JPanel {
         this.add(joinLobby);
         this.add(exit);
     }
-
-
 }
