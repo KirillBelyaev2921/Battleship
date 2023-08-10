@@ -1,5 +1,7 @@
 package arth.battleship.connection;
 
+import arth.battleship.model.Player;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -15,7 +17,7 @@ public class PlayerConnection {
     private BufferedReader reader;
     private PrintWriter writer;
 
-    public PlayerConnection() {
+    public PlayerConnection(Player player) {
         setUpNetworking();
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(new IncomingReader());
