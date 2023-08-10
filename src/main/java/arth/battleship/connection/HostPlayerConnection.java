@@ -14,7 +14,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class HostPlayerConnection {
-    ExecutorService executorService;
+    private final ExecutorService executorService;
+    private int port = 5000;
 
     private List<PrintWriter> clientWriters = new ArrayList<>();
 
@@ -33,7 +34,7 @@ public class HostPlayerConnection {
         @Override
         public void run() {
             try (ServerSocketChannel serverSocketChannel = ServerSocketChannel.open()) {
-                serverSocketChannel.bind(new InetSocketAddress(5000));
+                serverSocketChannel.bind(new InetSocketAddress(port));
 
                 while (serverSocketChannel.isOpen()) {
                     SocketChannel clientChannel = serverSocketChannel.accept();
@@ -43,7 +44,8 @@ public class HostPlayerConnection {
                     System.out.println("oke");
                 }
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                port += 1;
+                executorService.submit(new ServerHandler());
             }
         }
     }
@@ -66,5 +68,9 @@ public class HostPlayerConnection {
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    public int getPort() {
+        return port;
     }
 }
