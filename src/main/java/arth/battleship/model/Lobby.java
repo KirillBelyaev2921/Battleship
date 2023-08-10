@@ -5,7 +5,7 @@ import arth.battleship.connection.PlayerConnection;
 
 import javax.persistence.*;
 
-@Entity
+@Entity(name = "lobby")
 public class Lobby {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -67,5 +67,10 @@ public class Lobby {
 
     public int getPort() {
         return port;
+    }
+
+    @Override
+    public String toString() {
+        return "Lobby: " + lobbyName;
     }
 }
