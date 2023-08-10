@@ -19,7 +19,12 @@ public class PlaceShipsPanel extends JPanel {
         playerNameLabel = new JLabel("Enter name");
         playerName = new JTextField();
         texting = new JTextField("Just message");
-        isReady = new JCheckBox("Ready");
+        isReady = new JCheckBox("Not ready");
+        isReady.addActionListener(e -> isReady.setText(controller.ready(isReady.isSelected())));
 
+        this.add(playerNameLabel);
+        this.add(playerName);
+        this.add(texting);
+        this.add(isReady);
     }
 }
