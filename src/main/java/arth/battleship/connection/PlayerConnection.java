@@ -14,19 +14,20 @@ import java.util.concurrent.Executors;
 
 public class PlayerConnection {
 
+    private Player player;
     private BufferedReader reader;
     private PrintWriter writer;
 
-    public PlayerConnection(Player player) {
-        setUpNetworking();
+    public PlayerConnection(Player player, int port) {
+        this.player = player;
+        setUpNetworking(port);
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(new IncomingReader());
-        sendMessage("123");
     }
 
-    private void setUpNetworking() {
+    private void setUpNetworking(int port) {
         try {
-            InetSocketAddress serverAddress = new InetSocketAddress("192.168.0.230", 5000);
+            InetSocketAddress serverAddress = new InetSocketAddress("192.168.0.230", port);
             SocketChannel socketChannel = SocketChannel.open(serverAddress);
 
             writer = new PrintWriter(Channels.newWriter(socketChannel, StandardCharsets.UTF_8));
@@ -37,7 +38,7 @@ public class PlayerConnection {
             throw new RuntimeException(e);
         }
     }
-    private void sendMessage(String s) {
+    public void sendMessage(String s) {
         writer.println(s);
         writer.flush();
     }

@@ -1,5 +1,11 @@
 package arth.battleship.connection;
 
+import arth.battleship.database.SessionFactoryProvider;
+import arth.battleship.model.Lobby;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -14,14 +20,37 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class HostPlayerConnection {
-    private final ExecutorService executorService;
+    private ExecutorService executorService = Executors.newCachedThreadPool();
     private int port = 5000;
-
+    private Lobby lobby;
     private List<PrintWriter> clientWriters = new ArrayList<>();
 
-    public HostPlayerConnection() {
-        executorService = Executors.newCachedThreadPool();
-        executorService.submit(new ServerHandler());
+    public HostPlayerConnection(String lobbyName) {
+        this.lobby = new Lobby(lobbyName, port);
+
+        Thread thread = new Thread(new ServerHandler());
+        thread.start();
+    }
+    private void saveLobbyToDatabase() {
+        SessionFactory sessionFactory = SessionFactoryProvider.provideSessionFactory();
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+
+        session.save(lobby);
+        transaction.commit();
+
+        sessionFactory.close();
+    }
+
+    private void deleteLobbyFromDatabase() {
+        SessionFactory sessionFactory = SessionFactoryProvider.provideSessionFactory();
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+
+        session.remove(lobby);
+        transaction.commit();
+
+        sessionFactory.close();
     }
 
     private void tellEveryone(String message) {
@@ -30,9 +59,14 @@ public class HostPlayerConnection {
             writer.flush();
         }
     }
+
+    public Lobby getLobby() {
+        return lobby;
+    }
     class ServerHandler implements Runnable {
         @Override
         public void run() {
+            saveLobbyToDatabase();
             try (ServerSocketChannel serverSocketChannel = ServerSocketChannel.open()) {
                 serverSocketChannel.bind(new InetSocketAddress(port));
 
@@ -41,14 +75,19 @@ public class HostPlayerConnection {
                     PrintWriter writer = new PrintWriter(Channels.newWriter(clientChannel, StandardCharsets.UTF_8));
                     clientWriters.add(writer);
                     executorService.submit(new ClientHandler(clientChannel));
-                    System.out.println("oke");
+                    if (Thread.currentThread().isInterrupted()) {
+                        deleteLobbyFromDatabase();
+                    }
                 }
+                deleteLobbyFromDatabase();
             } catch (IOException e) {
                 port += 1;
+                lobby.setPort(port);
                 executorService.submit(new ServerHandler());
             }
         }
     }
+
     class ClientHandler implements Runnable {
         private final BufferedReader reader;
 

@@ -1,7 +1,11 @@
 package arth.battleship.controller;
 
+import arth.battleship.connection.PlayerConnection;
 import arth.battleship.database.SessionFactoryProvider;
+import arth.battleship.gui.BattleshipFrame;
+import arth.battleship.gui.PlaceShipsPanel;
 import arth.battleship.model.Lobby;
+import arth.battleship.model.Player;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -13,8 +17,12 @@ import javax.persistence.criteria.Root;
 import java.util.List;
 
 public class ChooseLobbyController {
-    public void chooseLobby(Lobby selected) {
-        System.out.println("selected " + selected);
+    public void chooseLobby(Lobby lobby) {
+        Player player = new Player();
+        PlayerConnection playerConnection = new PlayerConnection(player, lobby.getPort());
+        lobby.setPlayerTwo(playerConnection);
+        BattleshipFrame frame = BattleshipFrame.getInstance();
+        frame.setMainPanel(new PlaceShipsPanel(lobby, playerConnection));
     }
 
     public Lobby[] showLobbyList() {

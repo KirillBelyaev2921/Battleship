@@ -18,25 +18,24 @@ public class Lobby {
     private PlayerConnection playerOne;
     @Transient
     private PlayerConnection playerTwo;
-    @Transient
-    private HostPlayerConnection hostPlayerConnection;
 
     public Lobby() {
     }
 
-    public Lobby(String name, HostPlayerConnection hostPlayerConnection, int port) {
+    public Lobby(String name, int port) {
         this.lobbyName = name;
-        this.hostPlayerConnection = hostPlayerConnection;
         this.port = port;
     }
 
-    public Lobby(String name, HostPlayerConnection hostPlayerConnection, PlayerConnection playerConnection, int port) {
+    public Lobby(String name, PlayerConnection player, int port) {
         this.lobbyName = name;
-        this.hostPlayerConnection = hostPlayerConnection;
-        this.playerOne = playerConnection;
+        this.playerOne = player;
         this.port = port;
     }
 
+    public void setPlayerOne(PlayerConnection playerOne) {
+        this.playerOne = playerOne;
+    }
     public void setPlayerTwo(PlayerConnection playerTwo) {
         this.playerTwo = playerTwo;
     }
@@ -53,10 +52,6 @@ public class Lobby {
         return playerTwo;
     }
 
-    public HostPlayerConnection getHostPlayerConnection() {
-        return hostPlayerConnection;
-    }
-
     public void setId(Long id) {
         this.id = id;
     }
@@ -67,6 +62,10 @@ public class Lobby {
 
     public int getPort() {
         return port;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
     }
 
     @Override

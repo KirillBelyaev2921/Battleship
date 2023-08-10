@@ -4,8 +4,6 @@ import arth.battleship.controller.ChooseLobbyController;
 import arth.battleship.model.Lobby;
 
 import javax.swing.*;
-import java.util.List;
-import java.util.Vector;
 
 public class ChooseLobbyPanel extends JPanel {
     ChooseLobbyController controller;
@@ -33,14 +31,10 @@ public class ChooseLobbyPanel extends JPanel {
         JScrollPane theList = new JScrollPane(lobbyList);
 
 
-        showLobbyList();
+        listVector = controller.showLobbyList();
         lobbyList.setListData(listVector);
 
         this.add(chooseLobbyLabel);
         this.add(theList);
-    }
-
-    private void showLobbyList() {
-        listVector = controller.showLobbyList();
     }
 }
