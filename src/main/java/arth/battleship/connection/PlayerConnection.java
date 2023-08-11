@@ -4,9 +4,7 @@ import arth.battleship.gui.BattleshipFrame;
 import arth.battleship.gui.BattleshipGamePanel;
 import arth.battleship.model.Player;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.InetSocketAddress;
 import java.nio.channels.Channels;
 import java.nio.channels.SocketChannel;
@@ -18,7 +16,7 @@ public class PlayerConnection {
 
     private Player player;
     private BufferedReader reader;
-    private PrintWriter writer;
+    private ObjectOutputStream writer;
 
     public PlayerConnection(Player player) {
         this.player = player;
@@ -32,7 +30,7 @@ public class PlayerConnection {
             InetSocketAddress serverAddress = new InetSocketAddress("192.168.0.230", 5000);
             SocketChannel socketChannel = SocketChannel.open(serverAddress);
 
-            writer = new PrintWriter(Channels.newWriter(socketChannel, StandardCharsets.UTF_8));
+            writer = new ObjectOutputStream(Channels.newOutputStream(socketChannel));
             reader = new BufferedReader(Channels.newReader(socketChannel, StandardCharsets.UTF_8));
 
             System.out.println("Network established!");
@@ -40,10 +38,15 @@ public class PlayerConnection {
             throw new RuntimeException(e);
         }
     }
+
     public void sendMessage(String s) {
-        writer.println(s);
-        writer.flush();
+        try {
+            writer.writeObject(s);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
+
 
     public class IncomingReader implements Runnable {
         public void run() {

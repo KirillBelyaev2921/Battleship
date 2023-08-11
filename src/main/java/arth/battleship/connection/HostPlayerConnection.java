@@ -2,8 +2,8 @@ package arth.battleship.connection;
 
 import arth.battleship.model.Lobby;
 
-import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.nio.channels.Channels;
@@ -22,6 +22,8 @@ public class HostPlayerConnection {
 
     private List<PrintWriter> clientWriters = new ArrayList<>();
 
+    private int playersReadyCounter;
+
     public HostPlayerConnection(Lobby lobby) {
         this.lobby = lobby;
         executorService = Executors.newCachedThreadPool();
@@ -34,6 +36,7 @@ public class HostPlayerConnection {
             writer.flush();
         }
     }
+
     class ServerHandler implements Runnable {
         @Override
         public void run() {
@@ -45,33 +48,52 @@ public class HostPlayerConnection {
                     PrintWriter writer = new PrintWriter(Channels.newWriter(clientChannel, StandardCharsets.UTF_8));
                     clientWriters.add(writer);
                     executorService.submit(new ClientHandler(clientChannel));
-                    if (clientWriters.size() == 2) {
-                        tellEveryone("Game ready");
-                        return;
-                    }
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
     }
+
     class ClientHandler implements Runnable {
-        private final BufferedReader reader;
+        private final ObjectInputStream reader;
 
         public ClientHandler(SocketChannel clientSocket) {
-            reader = new BufferedReader(Channels.newReader(clientSocket, StandardCharsets.UTF_8));
+            try {
+                reader = new ObjectInputStream(Channels.newInputStream(clientSocket));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
 
         @Override
         public void run() {
-            String message;
+            Object message;
             try {
-                while ((message = reader.readLine()) != null) {
-                    System.out.println("Read " + message);
-                    tellEveryone(message);
+                while ((message = reader.readObject()) != null) {
+                    String command = (String) message;
+                    switch (command) {
+                        case "Ready" -> {
+                            playersReadyCounter++;
+                            checkPlayersIsReady();
+                        }
+                        case "Not Ready" -> {
+                            playersReadyCounter--;
+                            checkPlayersIsReady();
+                        }
+                    }
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);
+            } catch (ClassNotFoundException e) {
+                System.out.println("Wrong client version!");
+                throw new RuntimeException(e);
+            }
+        }
+
+        private void checkPlayersIsReady() {
+            if (playersReadyCounter == 2) {
+                tellEveryone("Game ready");
             }
         }
     }

@@ -1,5 +1,6 @@
 package arth.battleship.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Player {
@@ -8,6 +9,7 @@ public class Player {
     private List<Battleship> battleships;
 
     public Player() {
+        this.battleships = new ArrayList<>();
     }
 
     public Player(String playerName, List<Battleship> battleships) {
@@ -22,4 +24,17 @@ public class Player {
     public List<Battleship> getBattleships() {
         return battleships;
     }
+
+    public void setPlayerName(String playerName) {
+        this.playerName = playerName;
+    }
+
+    public void setBattleships(List<Battleship> battleships) {
+        this.battleships = battleships;
+    }
+
+    public void addBattleship(Battleship battleship) {
+        this.battleships.add(battleship);
+    }
+
 }
