@@ -6,6 +6,7 @@ import arth.battleship.exception.InvalidBattleshipSizeException;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Battleship implements Serializable {
     public static final int BATTLESHIP_MAX_SIZE = 4;
@@ -18,7 +19,7 @@ public class Battleship implements Serializable {
         if (!isCorrectPlacement(shipCells)) {
             throw new InvalidBattleshipCellsPlacementException();
         }
-        this.shipCells = List.of(shipCells);
+        this.shipCells = Arrays.stream(shipCells).map(String::toUpperCase).collect(Collectors.toList());
     }
 
     private boolean isCorrectPlacement(String[] shipCells) {

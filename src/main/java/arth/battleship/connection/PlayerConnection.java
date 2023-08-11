@@ -1,5 +1,7 @@
 package arth.battleship.connection;
 
+import arth.battleship.command.CommandLines;
+import arth.battleship.controller.GameController;
 import arth.battleship.gui.BattleshipFrame;
 import arth.battleship.gui.BattleshipGamePanel;
 import arth.battleship.model.Battleship;
@@ -17,6 +19,7 @@ import java.util.concurrent.Executors;
 public class PlayerConnection {
 
     private Player player;
+    GameController controller;
     private BufferedReader reader;
     private ObjectOutputStream writer;
 
@@ -51,12 +54,25 @@ public class PlayerConnection {
 
     public void setReady(String name, List<Battleship> battleships) {
         try {
-            writer.writeObject("Ready");
+            writer.writeObject(CommandLines.READY);
             writer.writeObject(name);
             writer.writeObject(battleships);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void shootShip(String text) {
+        try {
+            writer.writeObject(CommandLines.SHOOT);
+            writer.writeObject(text);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void setController(GameController gameController) {
+        this.controller = gameController;
     }
 
     public class IncomingReader implements Runnable {
@@ -65,12 +81,19 @@ public class PlayerConnection {
             try {
                 while ((message = reader.readLine()) != null) {
                     switch (message) {
-                        case "Game ready" -> BattleshipFrame.getInstance().setMainPanel(new BattleshipGamePanel());
+                        case CommandLines.GAME_START -> startGame();
+                        case CommandLines.SHOT_RESULT -> {
+                            controller.displayResult(reader.readLine());
+                        }
                     }
                 }
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
         }
+    }
+
+    private void startGame() {
+        BattleshipFrame.getInstance().setMainPanel(new BattleshipGamePanel(this));
     }
 }

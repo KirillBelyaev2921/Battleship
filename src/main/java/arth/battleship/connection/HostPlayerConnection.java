@@ -3,12 +3,12 @@ package arth.battleship.connection;
 import arth.battleship.model.Battleship;
 import arth.battleship.model.Lobby;
 import arth.battleship.model.Player;
+import arth.battleship.command.CommandLines;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.PrintWriter;
 import java.net.InetSocketAddress;
-import java.net.SocketAddress;
 import java.nio.channels.Channels;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
@@ -37,6 +37,13 @@ public class HostPlayerConnection {
         for (PrintWriter writer : clientWriters) {
             writer.println(message);
             writer.flush();
+        }
+    }
+    private void shoot(String command, String result) {
+        for (PrintWriter printWriter : clientWriters) {
+            printWriter.println(CommandLines.SHOT_RESULT);
+            printWriter.println(result + command);
+            printWriter.flush();
         }
     }
 
@@ -78,14 +85,26 @@ public class HostPlayerConnection {
                 while ((message = reader.readObject()) != null) {
                     String command = (String) message;
                     switch (command) {
-                        case "Ready" -> {
+                        case CommandLines.READY -> {
                             playersReadyCounter++;
                             setPlayer();
                             checkPlayersIsReady();
                         }
-                        case "Not Ready" -> {
+                        case CommandLines.NOT_READY -> {
                             playersReadyCounter--;
                             checkPlayersIsReady();
+                        }
+                        case CommandLines.SHOOT -> {
+                            String cell = (String) reader.readObject();
+                            Player secondPlayer = lobby.getSecondPlayer(address);
+                            String shoot = lobby.getPlayer(address).getPlayerName() +
+                                    " shoot " + cell + ". Result: ";
+                            if (secondPlayer.getBattleships().stream()
+                                    .noneMatch(battleship -> battleship.getShipCells().stream().noneMatch(cell::equals))) {
+                                shoot("Hit", shoot);
+                            } else {
+                                shoot("Miss", shoot);
+                            }
                         }
                     }
                 }
@@ -110,16 +129,13 @@ public class HostPlayerConnection {
 
             Player player = new Player(name, battleships);
             lobby.addPlayer(address, player);
-
-            System.out.println(player.getBattleships().get(0).getShipCells());
-            System.out.println(lobby.getPlayer(address).getBattleships().get(0).getShipCells());
         }
 
         private void checkPlayersIsReady() {
             if (playersReadyCounter == 2) {
-                tellEveryone("Game ready");
-                lobby.getPlayers().values().forEach((e) -> System.out.println(e.getBattleships().get(0).getShipCells()));
+                tellEveryone(CommandLines.GAME_START);
             }
         }
+
     }
 }

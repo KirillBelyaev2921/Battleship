@@ -26,6 +26,11 @@ public class Lobby {
         return players.get(address);
     }
 
+    public Player getSecondPlayer(String playerOneAddress) {
+        String playerTwoAddress = players.keySet().stream().filter(e -> !e.equals(playerOneAddress)).findFirst().orElse(null);
+        return players.get(playerTwoAddress);
+    }
+
     public Map<String, Player> getPlayers() {
         return players;
     }
