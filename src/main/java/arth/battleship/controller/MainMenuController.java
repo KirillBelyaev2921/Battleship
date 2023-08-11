@@ -4,6 +4,7 @@ import arth.battleship.connection.HostPlayerConnection;
 import arth.battleship.connection.PlayerConnection;
 import arth.battleship.gui.BattleshipFrame;
 import arth.battleship.gui.CreateLobbyPanel;
+import arth.battleship.gui.PlaceShipsPanel;
 
 public class MainMenuController {
     BattleshipFrame frame;
@@ -17,7 +18,7 @@ public class MainMenuController {
     }
 
     public void chooseLobby() {
-        PlayerConnection player = new PlayerConnection();
+        frame.setMainPanel(new PlaceShipsPanel());
     }
 
     public void exit() {

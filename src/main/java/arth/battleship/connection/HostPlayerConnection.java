@@ -1,5 +1,7 @@
 package arth.battleship.connection;
 
+import arth.battleship.model.Lobby;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -14,11 +16,14 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class HostPlayerConnection {
-    ExecutorService executorService;
+    private final ExecutorService executorService;
+
+    private Lobby lobby;
 
     private List<PrintWriter> clientWriters = new ArrayList<>();
 
-    public HostPlayerConnection() {
+    public HostPlayerConnection(Lobby lobby) {
+        this.lobby = lobby;
         executorService = Executors.newCachedThreadPool();
         executorService.submit(new ServerHandler());
     }
@@ -40,7 +45,10 @@ public class HostPlayerConnection {
                     PrintWriter writer = new PrintWriter(Channels.newWriter(clientChannel, StandardCharsets.UTF_8));
                     clientWriters.add(writer);
                     executorService.submit(new ClientHandler(clientChannel));
-                    System.out.println("oke");
+                    if (clientWriters.size() == 2) {
+                        tellEveryone("Game ready");
+                        return;
+                    }
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);

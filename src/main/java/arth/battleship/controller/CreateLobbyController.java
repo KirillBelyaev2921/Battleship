@@ -15,10 +15,8 @@ public class CreateLobbyController {
     }
 
     public void createLobby(String name) {
-        HostPlayerConnection host = new HostPlayerConnection();
-        Player player = new Player();
-        PlayerConnection playerConnection = new PlayerConnection(player);
-        Lobby lobby = new Lobby(name, host, playerConnection);
+        Lobby lobby = new Lobby(name);
+        HostPlayerConnection host = new HostPlayerConnection(lobby);
         frame.setMainPanel(new PlaceShipsPanel());
     }
 }

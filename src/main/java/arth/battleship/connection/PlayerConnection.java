@@ -1,5 +1,9 @@
 package arth.battleship.connection;
 
+import arth.battleship.gui.BattleshipFrame;
+import arth.battleship.gui.BattleshipGamePanel;
+import arth.battleship.model.Player;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -12,14 +16,15 @@ import java.util.concurrent.Executors;
 
 public class PlayerConnection {
 
+    private Player player;
     private BufferedReader reader;
     private PrintWriter writer;
 
-    public PlayerConnection() {
+    public PlayerConnection(Player player) {
+        this.player = player;
         setUpNetworking();
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(new IncomingReader());
-        sendMessage("123");
     }
 
     private void setUpNetworking() {
@@ -35,7 +40,7 @@ public class PlayerConnection {
             throw new RuntimeException(e);
         }
     }
-    private void sendMessage(String s) {
+    public void sendMessage(String s) {
         writer.println(s);
         writer.flush();
     }
@@ -45,7 +50,9 @@ public class PlayerConnection {
             String message;
             try {
                 while ((message = reader.readLine()) != null) {
-                    System.out.println("read " + message);
+                    switch (message) {
+                        case "Game ready" -> BattleshipFrame.getInstance().setMainPanel(new BattleshipGamePanel());
+                    }
                 }
             } catch (IOException ex) {
                 ex.printStackTrace();

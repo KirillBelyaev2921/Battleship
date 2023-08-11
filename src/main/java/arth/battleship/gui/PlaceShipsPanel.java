@@ -1,5 +1,6 @@
 package arth.battleship.gui;
 
+import arth.battleship.connection.HostPlayerConnection;
 import arth.battleship.controller.PlaceShipsController;
 
 import javax.swing.*;
@@ -20,7 +21,12 @@ public class PlaceShipsPanel extends JPanel {
         playerName = new JTextField();
         texting = new JTextField("Just message");
         isReady = new JCheckBox("Not ready");
-        isReady.addActionListener(e -> isReady.setText(controller.ready(isReady.isSelected())));
+        isReady.addActionListener(e -> isReady.setText(
+                controller.ready(isReady.isSelected(),
+                    playerName.getText(),
+                    texting.getText())
+                )
+        );
 
         this.add(playerNameLabel);
         this.add(playerName);
