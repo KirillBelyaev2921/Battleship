@@ -1,28 +1,32 @@
 package arth.battleship.model;
 
-import arth.battleship.connection.PlayerConnection;
-
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Lobby {
     private final String lobbyName;
-    private final List<PlayerConnection> players;
+    private final Map<String, Player> players;
 
     public Lobby(String lobbyName) {
         this.lobbyName = lobbyName;
-        players = new ArrayList<>();
+        players = new HashMap<>();
     }
 
-    public void addPlayerConnection(PlayerConnection playerConnection) {
-        players.add(playerConnection);
+    public void addPlayer(String address,Player player) {
+        players.put(address, player);
     }
 
     public String getLobbyName() {
         return lobbyName;
     }
 
-    public List<PlayerConnection> getPlayers() {
+    public Player getPlayer(String address) {
+        return players.get(address);
+    }
+
+    public Map<String, Player> getPlayers() {
         return players;
     }
 

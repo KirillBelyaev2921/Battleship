@@ -3,10 +3,11 @@ package arth.battleship.model;
 import arth.battleship.exception.InvalidBattleshipCellsPlacementException;
 import arth.battleship.exception.InvalidBattleshipSizeException;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
-public class Battleship {
+public class Battleship implements Serializable {
     public static final int BATTLESHIP_MAX_SIZE = 4;
     private final List<String> shipCells;
     public static final int BOARD_SIZE = 10;

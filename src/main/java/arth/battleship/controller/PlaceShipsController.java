@@ -1,7 +1,11 @@
 package arth.battleship.controller;
 
 import arth.battleship.connection.PlayerConnection;
+import arth.battleship.model.Battleship;
 import arth.battleship.model.Player;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class PlaceShipsController {
@@ -14,8 +18,12 @@ public class PlaceShipsController {
     }
 
     public String ready(boolean selected, String name, String ships) {
-        player.setPlayerName(name + " " + ships);
-        playerConnection.sendMessage(selected ? "Ready" : "Not Ready");
+        if (selected) {
+            Battleship battleship = new Battleship(ships.split(" "));
+            playerConnection.setReady(name, List.of(battleship));
+        } else {
+            playerConnection.sendMessage("Not Ready");
+        }
 
         return selected ? "Ready" : "Not ready";
     }

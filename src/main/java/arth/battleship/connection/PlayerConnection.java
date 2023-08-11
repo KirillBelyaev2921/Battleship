@@ -2,6 +2,7 @@ package arth.battleship.connection;
 
 import arth.battleship.gui.BattleshipFrame;
 import arth.battleship.gui.BattleshipGamePanel;
+import arth.battleship.model.Battleship;
 import arth.battleship.model.Player;
 
 import java.io.*;
@@ -9,6 +10,7 @@ import java.net.InetSocketAddress;
 import java.nio.channels.Channels;
 import java.nio.channels.SocketChannel;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -47,6 +49,15 @@ public class PlayerConnection {
         }
     }
 
+    public void setReady(String name, List<Battleship> battleships) {
+        try {
+            writer.writeObject("Ready");
+            writer.writeObject(name);
+            writer.writeObject(battleships);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public class IncomingReader implements Runnable {
         public void run() {
