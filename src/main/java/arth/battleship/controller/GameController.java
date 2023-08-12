@@ -7,6 +7,7 @@ public class GameController {
 
     PlayerConnection connection;
     BattleshipGamePanel panel;
+    private String cell;
 
     public GameController(PlayerConnection connection, BattleshipGamePanel panel) {
         this.panel = panel;
@@ -14,11 +15,22 @@ public class GameController {
         connection.setController(this);
     }
 
-    public void shootShip(String text) {
-        connection.shootShip(text);
+    public void shootShip() {
+        if (cell != null) {
+            connection.shootShip(cell);
+            cell = null;
+        }
     }
 
     public void displayResult(String readLine) {
         panel.displayResult(readLine);
+    }
+
+    public void setCellToShot(int i, int j) {
+        cell = CellCoordinateFormatter.numericToString(i, j);
+    }
+
+    public String getCell() {
+        return cell;
     }
 }

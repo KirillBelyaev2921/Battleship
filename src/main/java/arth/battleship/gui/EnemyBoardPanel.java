@@ -3,36 +3,31 @@ package arth.battleship.gui;
 import arth.battleship.constants.CommandLines;
 import arth.battleship.controller.BoardController;
 import arth.battleship.controller.CellCoordinateFormatter;
+import arth.battleship.controller.GameController;
 import arth.battleship.model.Battleship;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlaceShipsBoardPanel extends JPanel {
-    private BoardController controller;
+public class EnemyBoardPanel extends JPanel {
+    private GameController controller;
     private List<List<CellPanel>> cells;
     private JCheckBox checkBox;
-    private boolean isReady;
+    private boolean isTurn = true;
 
-    public PlaceShipsBoardPanel(boolean isReady) {
+
+    public EnemyBoardPanel(GameController controller) {
         this();
-        this.isReady = isReady;
+        this.controller = controller;
     }
 
-    public PlaceShipsBoardPanel(JCheckBox checkBox) {
-        this();
-        this.checkBox = checkBox;
-    }
-
-    public PlaceShipsBoardPanel() {
+    public EnemyBoardPanel() {
         this.setPreferredSize(new Dimension(400, 400));
         this.setLayout(new GridLayout(11, 11));
-        controller = new BoardController();
 
         cells = new ArrayList<>();
         List<CellPanel> cellsRow = new ArrayList<>();
@@ -47,12 +42,12 @@ public class PlaceShipsBoardPanel extends JPanel {
         cells.add(cellsRow);
         for (int i = 0; i < 10; i++) {
             cellsRow = new ArrayList<>();
-            cellPanel = new LabelCellPanel(CellCoordinateFormatter.numericToString(i, 0).substring(0, 1));;
+            cellPanel = new LabelCellPanel(CellCoordinateFormatter.numericToString(i, 0).substring(0, 1));
             cellsRow.add(cellPanel);
             this.add(cellPanel);
             for (int j = 0; j < 10; j++) {
-                ShipCellPanel cell = new ShipCellPanel(i, j);
-                cell.addMouseListener(new ShipPlaceListener());
+                EnemyCellPanel cell = new EnemyCellPanel(i, j);
+                cell.addMouseListener(new ShipShootListener());
                 cellsRow.add(cell);
                 this.add(cell);
             }
@@ -60,27 +55,27 @@ public class PlaceShipsBoardPanel extends JPanel {
         }
     }
 
-    public List<Battleship> getBattleships() {
-        return controller.getBattleships();
-    }
-
     public void setReady(boolean b) {
-        this.isReady = b;
+        this.isTurn = b;
     }
 
-    private class ShipPlaceListener implements MouseListener {
+    private class ShipShootListener implements MouseListener {
 
         @Override
         public void mousePressed(MouseEvent e) {
-            if (!isReady) {
-                checkBox.setEnabled(false);
-                ShipCellPanel cellPanel = (ShipCellPanel) e.getComponent();
-                cellPanel.setShip(!cellPanel.isShip());
+            if (isTurn) {
+                EnemyCellPanel cellPanel = (EnemyCellPanel) e.getComponent();
+                if (!cellPanel.isShot()) {
 
-                String response = controller.updatePlayerBattleships(cellPanel.isShip(), cellPanel.getI(), cellPanel.getJ());
-                checkBox.setText(response.equals(CommandLines.READY) ? CommandLines.NOT_READY : response);
-                checkBox.setEnabled(response.equals(CommandLines.READY));
-                repaint();
+                    if (controller.getCell() != null) {
+                        List<Integer> cell = CellCoordinateFormatter.stringToNumericList(controller.getCell());
+                        EnemyCellPanel cellPanel1 = (EnemyCellPanel) cells.get(cell.get(0) + 2).get(cell.get(1) + 1);
+                        cellPanel1.setShip(EnemyCellPanel.CellStatus.EMPTY);
+                    }
+                    controller.setCellToShot(cellPanel.getI() - 1, cellPanel.getJ() - 1);
+                    cellPanel.setShip(EnemyCellPanel.CellStatus.SELECTED);
+                    repaint();
+                }
             }
         }
 
@@ -104,5 +99,4 @@ public class PlaceShipsBoardPanel extends JPanel {
 
         }
     }
-
 }

@@ -9,7 +9,7 @@ public class BattleshipGamePanel extends JPanel {
     GameController controller;
     JLabel gameLabel;
     JTextArea turns;
-    JTextField shoot;
+    JPanel boards;
     JButton shootButton;
 
     public BattleshipGamePanel(PlayerConnection connection) {
@@ -22,13 +22,16 @@ public class BattleshipGamePanel extends JPanel {
         turns.setLineWrap(true);
         turns.setWrapStyleWord(true);
         turns.setEditable(false);
-        shoot = new JTextField();
+        boards = new JPanel();
+        boards.add(new PlaceShipsBoardPanel(true));
+        boards.add(new EnemyBoardPanel(controller));
+
         shootButton = new JButton("Shoot");
-        shootButton.addActionListener(e -> controller.shootShip(shoot.getText()));
+        shootButton.addActionListener(e -> controller.shootShip());
 
         this.add(gameLabel);
         this.add(turns);
-        this.add(shoot);
+        this.add(boards);
         this.add(shootButton);
     }
 

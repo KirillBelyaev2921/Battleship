@@ -177,8 +177,7 @@ public class BattleshipsBuilder {
             return;
 
         if (board[i][j] == CellStatus.SHIP) {
-            char col = (char) (i + 'A');
-            strings.add(col + Integer.toString(j + 1));
+            strings.add(CellCoordinateFormatter.numericToString(i, j));
             board[i][j] = CellStatus.SHIP_COUNTED;
         }
 

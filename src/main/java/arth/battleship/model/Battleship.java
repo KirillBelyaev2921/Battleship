@@ -1,5 +1,6 @@
 package arth.battleship.model;
 
+import arth.battleship.controller.CellCoordinateFormatter;
 import arth.battleship.exception.InvalidBattleshipCellsPlacementException;
 import arth.battleship.exception.InvalidBattleshipSizeException;
 
@@ -29,11 +30,11 @@ public class Battleship implements Serializable {
         List<Integer> horizontal;
         try {
             vertical = Arrays.stream(shipCells)
-                    .map(s -> (int) s.toUpperCase().charAt(0) - (int) 'A' + 1)
+                    .map(s -> CellCoordinateFormatter.stringToNumericList(s).get(0) + 1)
                     .toList();
 
             horizontal = Arrays.stream(shipCells)
-                    .map(s -> Integer.parseInt(s.substring(1)))
+                    .map(s -> CellCoordinateFormatter.stringToNumericList(s).get(1))
                     .toList();
         } catch (IndexOutOfBoundsException | NumberFormatException e) {
             return false;
