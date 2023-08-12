@@ -1,5 +1,6 @@
 package arth.battleship.gui;
 
+import arth.battleship.constants.CommandLines;
 import arth.battleship.controller.BoardController;
 
 import javax.swing.*;
@@ -13,6 +14,13 @@ import java.util.List;
 public class BoardPanel extends JPanel {
     private BoardController controller;
     private List<List<CellPanel>> cells;
+    private JCheckBox checkBox;
+    private boolean isReady;
+
+    public BoardPanel(JCheckBox checkBox) {
+        this();
+        this.checkBox = checkBox;
+    }
 
     public BoardPanel() {
         this.setLayout(new GridLayout(10, 10));
@@ -39,15 +47,24 @@ public class BoardPanel extends JPanel {
         g2d.draw(border);
     }
 
+    public void setReady(boolean b) {
+        this.isReady = b;
+    }
+
     private class ShipPlaceListener implements MouseListener {
 
         @Override
         public void mousePressed(MouseEvent e) {
-            CellPanel cellPanel = (CellPanel) e.getComponent();
-            cellPanel.setShip(!cellPanel.isShip());
+            if (!isReady) {
+                checkBox.setEnabled(false);
+                CellPanel cellPanel = (CellPanel) e.getComponent();
+                cellPanel.setShip(!cellPanel.isShip());
 
-            controller.updatePlayerBattleships(cellPanel.isShip(), cellPanel.getI(), cellPanel.getJ());
-            repaint();
+                String response = controller.updatePlayerBattleships(cellPanel.isShip(), cellPanel.getI(), cellPanel.getJ());
+                checkBox.setText(response.equals(CommandLines.READY) ? CommandLines.NOT_READY : response);
+                checkBox.setEnabled(response.equals(CommandLines.READY));
+                repaint();
+            }
         }
 
         @Override

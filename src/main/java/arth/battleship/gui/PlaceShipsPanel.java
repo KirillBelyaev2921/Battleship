@@ -1,5 +1,6 @@
 package arth.battleship.gui;
 
+import arth.battleship.constants.CommandLines;
 import arth.battleship.controller.PlaceShipsController;
 
 import javax.swing.*;
@@ -18,9 +19,10 @@ public class PlaceShipsPanel extends JPanel {
 
         playerNameLabel = new JLabel("Enter name");
         playerName = new JTextField();
-        board = new BoardPanel();
-        isReady = new JCheckBox("Not ready");
+        isReady = new JCheckBox(CommandLines.NOT_READY);
         isReady.addActionListener(e -> ready());
+        isReady.setEnabled(false);
+        board = new BoardPanel(isReady);
 
         this.add(playerNameLabel);
         this.add(playerName);
@@ -36,6 +38,6 @@ public class PlaceShipsPanel extends JPanel {
                         "A1"));
 
         playerName.setEnabled(!isPlayerReady);
-        board.setEnabled(!isPlayerReady);
+        board.setReady(isPlayerReady);
     }
 }

@@ -34,6 +34,13 @@ public class BattleshipsBuilder {
         return fillShip(cells);
     }
 
+    public void removeCell(int i, int j) throws InvalidNumberOfShipsOfOneSizeException,
+            InvalidBattleshipSizeException,
+            DiagonalCellPlacedException {
+        board[i][j] = CellStatus.EMPTY;
+        recount();
+    }
+
     private int fillShip(List<List<Integer>> cells) throws InvalidNumberOfShipsOfOneSizeException,
             InvalidBattleshipSizeException,
             DiagonalCellPlacedException {
@@ -53,7 +60,10 @@ public class BattleshipsBuilder {
         }
     }
 
-    private void recount() throws InvalidNumberOfShipsOfOneSizeException, DiagonalCellPlacedException {
+    private void recount() throws InvalidNumberOfShipsOfOneSizeException, DiagonalCellPlacedException, InvalidBattleshipSizeException {
+
+        boolean isOverSized = false;
+
         battleshipsSizesCount.put(1, 0);
         battleshipsSizesCount.put(2, 0);
         battleshipsSizesCount.put(3, 0);
@@ -63,6 +73,8 @@ public class BattleshipsBuilder {
                 int count = recountShip(i, j, 0);
                 if (count > 0 && count < 5) {
                     battleshipsSizesCount.put(count, battleshipsSizesCount.get(count) + 1);
+                } else if (count >= 5) {
+                    isOverSized = true;
                 }
             }
         }
@@ -73,6 +85,9 @@ public class BattleshipsBuilder {
                     board[i][j] = CellStatus.SHIP;
             }
         }
+
+        if (isOverSized)
+            throw new InvalidBattleshipSizeException();
 
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
