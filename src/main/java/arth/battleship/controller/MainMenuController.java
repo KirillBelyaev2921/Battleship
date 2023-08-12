@@ -1,7 +1,5 @@
 package arth.battleship.controller;
 
-import arth.battleship.connection.HostPlayerConnection;
-import arth.battleship.connection.PlayerConnection;
 import arth.battleship.gui.BattleshipFrame;
 import arth.battleship.gui.CreateLobbyPanel;
 import arth.battleship.gui.PlaceShipsPanel;

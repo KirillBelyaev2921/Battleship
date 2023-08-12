@@ -1,11 +1,9 @@
 package arth.battleship.controller;
 
-import arth.battleship.connection.HostPlayerConnection;
-import arth.battleship.connection.PlayerConnection;
+import arth.battleship.socket.HostPlayerConnection;
 import arth.battleship.gui.BattleshipFrame;
 import arth.battleship.gui.PlaceShipsPanel;
 import arth.battleship.model.Lobby;
-import arth.battleship.model.Player;
 
 public class CreateLobbyController {
     BattleshipFrame frame;

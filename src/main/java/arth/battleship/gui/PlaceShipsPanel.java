@@ -8,7 +8,7 @@ public class PlaceShipsPanel extends JPanel {
     PlaceShipsController controller;
     JLabel playerNameLabel;
     JTextField playerName;
-    JTextField texting;
+    BoardPanel board;
     JCheckBox isReady;
 
     public PlaceShipsPanel() {
@@ -18,13 +18,13 @@ public class PlaceShipsPanel extends JPanel {
 
         playerNameLabel = new JLabel("Enter name");
         playerName = new JTextField();
-        texting = new JTextField();
+        board = new BoardPanel();
         isReady = new JCheckBox("Not ready");
         isReady.addActionListener(e -> ready());
 
         this.add(playerNameLabel);
         this.add(playerName);
-        this.add(texting);
+        this.add(board);
         this.add(isReady);
     }
 
@@ -33,9 +33,9 @@ public class PlaceShipsPanel extends JPanel {
         isReady.setText(
                 controller.ready(isPlayerReady,
                         playerName.getText(),
-                        texting.getText()));
+                        "A1"));
 
         playerName.setEnabled(!isPlayerReady);
-        texting.setEnabled(!isPlayerReady);
+        board.setEnabled(!isPlayerReady);
     }
 }

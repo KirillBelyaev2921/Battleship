@@ -1,9 +1,9 @@
-package arth.battleship.connection;
+package arth.battleship.socket;
 
 import arth.battleship.model.Battleship;
 import arth.battleship.model.Lobby;
 import arth.battleship.model.Player;
-import arth.battleship.command.CommandLines;
+import arth.battleship.constants.CommandLines;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

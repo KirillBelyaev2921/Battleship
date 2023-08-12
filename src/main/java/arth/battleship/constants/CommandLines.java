@@ -1,4 +1,4 @@
-package arth.battleship.command;
+package arth.battleship.constants;
 
 public class CommandLines {
     public static final String SHOOT = "Shoot";

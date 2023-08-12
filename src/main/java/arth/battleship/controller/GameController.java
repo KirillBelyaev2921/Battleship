@@ -1,6 +1,6 @@
 package arth.battleship.controller;
 
-import arth.battleship.connection.PlayerConnection;
+import arth.battleship.socket.PlayerConnection;
 import arth.battleship.gui.BattleshipGamePanel;
 
 public class GameController {

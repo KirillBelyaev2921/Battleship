@@ -1,6 +1,6 @@
-package arth.battleship.connection;
+package arth.battleship.socket;
 
-import arth.battleship.command.CommandLines;
+import arth.battleship.constants.CommandLines;
 import arth.battleship.controller.GameController;
 import arth.battleship.gui.BattleshipFrame;
 import arth.battleship.gui.BattleshipGamePanel;

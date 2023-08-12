@@ -1,6 +1,6 @@
 package arth.battleship.gui;
 
-import arth.battleship.connection.PlayerConnection;
+import arth.battleship.socket.PlayerConnection;
 import arth.battleship.controller.GameController;
 
 import javax.swing.*;

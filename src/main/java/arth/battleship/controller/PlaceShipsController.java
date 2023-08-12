@@ -1,10 +1,9 @@
 package arth.battleship.controller;
 
-import arth.battleship.connection.PlayerConnection;
+import arth.battleship.socket.PlayerConnection;
 import arth.battleship.model.Battleship;
 import arth.battleship.model.Player;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
