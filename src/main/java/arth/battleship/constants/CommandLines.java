@@ -6,5 +6,6 @@ public class CommandLines {
     public static final String NOT_READY = "Not Ready";
     public static final String GAME_START = "Game start";
     public static final String SHOT_RESULT = "Shot Result";
+    public static final String SET_PLAYERS = "Set Players";
 
 }

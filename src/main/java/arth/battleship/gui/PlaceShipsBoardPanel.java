@@ -2,6 +2,7 @@ package arth.battleship.gui;
 
 import arth.battleship.constants.CommandLines;
 import arth.battleship.controller.BoardController;
+import arth.battleship.model.Battleship;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,18 +12,18 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BoardPanel extends JPanel {
+public class PlaceShipsBoardPanel extends JPanel {
     private BoardController controller;
     private List<List<CellPanel>> cells;
     private JCheckBox checkBox;
     private boolean isReady;
 
-    public BoardPanel(JCheckBox checkBox) {
+    public PlaceShipsBoardPanel(JCheckBox checkBox) {
         this();
         this.checkBox = checkBox;
     }
 
-    public BoardPanel() {
+    public PlaceShipsBoardPanel() {
         this.setLayout(new GridLayout(10, 10));
         controller = new BoardController();
 
@@ -38,6 +39,10 @@ public class BoardPanel extends JPanel {
             }
             cells.add(cellsRow);
         }
+    }
+
+    public List<Battleship> getBattleships() {
+        return controller.getBattleships();
     }
 
     @Override

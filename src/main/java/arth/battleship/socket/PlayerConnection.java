@@ -19,7 +19,7 @@ import java.util.concurrent.Executors;
 public class PlayerConnection {
 
     private Player player;
-    GameController controller;
+    private GameController controller;
     private BufferedReader reader;
     private ObjectOutputStream writer;
 
@@ -28,6 +28,10 @@ public class PlayerConnection {
         setUpNetworking();
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(new IncomingReader());
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 
     private void setUpNetworking() {
@@ -82,9 +86,8 @@ public class PlayerConnection {
                 while ((message = reader.readLine()) != null) {
                     switch (message) {
                         case CommandLines.GAME_START -> startGame();
-                        case CommandLines.SHOT_RESULT -> {
-                            controller.displayResult(reader.readLine());
-                        }
+                        case CommandLines.SHOT_RESULT -> controller.displayResult(reader.readLine());
+                        case CommandLines.SET_PLAYERS -> setReady(player.getPlayerName(), player.getBattleships());
                     }
                 }
             } catch (IOException ex) {

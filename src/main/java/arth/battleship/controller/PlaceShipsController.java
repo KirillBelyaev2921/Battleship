@@ -17,12 +17,10 @@ public class PlaceShipsController {
         playerConnection = new PlayerConnection(player);
     }
 
-    public String ready(boolean selected, String name, String ships) {
+    public String ready(boolean selected, String name, List<Battleship> battleships) {
         if (selected) {
-            // TODO
-            //  create list of battleships from user and send it to the server
-            Battleship battleship = new Battleship(ships.split(" "));
-            playerConnection.setReady(name, List.of(battleship));
+            playerConnection.setPlayer(new Player(name, battleships));
+            playerConnection.sendMessage(CommandLines.READY);
         } else {
             playerConnection.sendMessage(CommandLines.NOT_READY);
         }

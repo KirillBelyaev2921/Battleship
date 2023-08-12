@@ -87,7 +87,6 @@ public class HostPlayerConnection {
                     switch (command) {
                         case CommandLines.READY -> {
                             playersReadyCounter++;
-                            setPlayer();
                             checkPlayersIsReady();
                         }
                         case CommandLines.NOT_READY -> {
@@ -105,6 +104,9 @@ public class HostPlayerConnection {
                             } else {
                                 shoot("Miss", shoot);
                             }
+                        }
+                        case CommandLines.SET_PLAYERS -> {
+                            setPlayer();
                         }
                     }
                 }

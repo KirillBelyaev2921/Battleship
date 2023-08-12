@@ -9,7 +9,7 @@ public class PlaceShipsPanel extends JPanel {
     PlaceShipsController controller;
     JLabel playerNameLabel;
     JTextField playerName;
-    BoardPanel board;
+    PlaceShipsBoardPanel board;
     JCheckBox isReady;
 
     public PlaceShipsPanel() {
@@ -22,7 +22,7 @@ public class PlaceShipsPanel extends JPanel {
         isReady = new JCheckBox(CommandLines.NOT_READY);
         isReady.addActionListener(e -> ready());
         isReady.setEnabled(false);
-        board = new BoardPanel(isReady);
+        board = new PlaceShipsBoardPanel(isReady);
 
         this.add(playerNameLabel);
         this.add(playerName);
@@ -32,11 +32,9 @@ public class PlaceShipsPanel extends JPanel {
 
     private void ready() {
         boolean isPlayerReady = isReady.isSelected();
-        isReady.setText(
-                controller.ready(isPlayerReady,
-                        playerName.getText(),
-                        "A1"));
-
+        isReady.setText(controller.ready(isPlayerReady,
+                playerName.getText(),
+                board.getBattleships()));
         playerName.setEnabled(!isPlayerReady);
         board.setReady(isPlayerReady);
     }
