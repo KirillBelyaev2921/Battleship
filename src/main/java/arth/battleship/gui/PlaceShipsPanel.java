@@ -1,8 +1,7 @@
 package arth.battleship.gui;
 
-import arth.battleship.connection.PlayerConnection;
+import arth.battleship.constants.CommandLines;
 import arth.battleship.controller.PlaceShipsController;
-import arth.battleship.model.Lobby;
 
 import javax.swing.*;
 
@@ -10,25 +9,35 @@ public class PlaceShipsPanel extends JPanel {
     PlaceShipsController controller;
     JLabel playerNameLabel;
     JTextField playerName;
-    JTextField texting;
+    BoardPanel board;
     JCheckBox isReady;
 
-    public PlaceShipsPanel(Lobby lobby, PlayerConnection playerConnection) {
+    public PlaceShipsPanel() {
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.setBorder(BorderFactory.createEmptyBorder(100, 100, 100, 100));
-        controller = new PlaceShipsController(lobby, playerConnection);
+        controller = new PlaceShipsController();
 
         playerNameLabel = new JLabel("Enter name");
         playerName = new JTextField();
-        texting = new JTextField("Just message");
-        isReady = new JCheckBox("Not ready");
-        isReady.addActionListener(e -> isReady.setText(controller.ready(isReady.isSelected(),
-                playerName.getText(),
-                texting.getText())));
+        isReady = new JCheckBox(CommandLines.NOT_READY);
+        isReady.addActionListener(e -> ready());
+        isReady.setEnabled(false);
+        board = new BoardPanel(isReady);
 
         this.add(playerNameLabel);
         this.add(playerName);
-        this.add(texting);
+        this.add(board);
         this.add(isReady);
+    }
+
+    private void ready() {
+        boolean isPlayerReady = isReady.isSelected();
+        isReady.setText(
+                controller.ready(isPlayerReady,
+                        playerName.getText(),
+                        "A1"));
+
+        playerName.setEnabled(!isPlayerReady);
+        board.setReady(isPlayerReady);
     }
 }

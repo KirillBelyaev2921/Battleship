@@ -3,10 +3,12 @@ package arth.battleship.model;
 import arth.battleship.exception.InvalidBattleshipCellsPlacementException;
 import arth.battleship.exception.InvalidBattleshipSizeException;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
-public class Battleship {
+public class Battleship implements Serializable {
     public static final int BATTLESHIP_MAX_SIZE = 4;
     private final List<String> shipCells;
     public static final int BOARD_SIZE = 10;
@@ -17,7 +19,7 @@ public class Battleship {
         if (!isCorrectPlacement(shipCells)) {
             throw new InvalidBattleshipCellsPlacementException();
         }
-        this.shipCells = List.of(shipCells);
+        this.shipCells = Arrays.stream(shipCells).map(String::toUpperCase).collect(Collectors.toList());
     }
 
     private boolean isCorrectPlacement(String[] shipCells) {

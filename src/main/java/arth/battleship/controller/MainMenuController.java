@@ -1,10 +1,8 @@
 package arth.battleship.controller;
 
-import arth.battleship.connection.HostPlayerConnection;
-import arth.battleship.connection.PlayerConnection;
 import arth.battleship.gui.BattleshipFrame;
-import arth.battleship.gui.ChooseLobbyPanel;
 import arth.battleship.gui.CreateLobbyPanel;
+import arth.battleship.gui.PlaceShipsPanel;
 
 public class MainMenuController {
     BattleshipFrame frame;
@@ -18,7 +16,7 @@ public class MainMenuController {
     }
 
     public void chooseLobby() {
-        frame.setMainPanel(new ChooseLobbyPanel());
+        frame.setMainPanel(new PlaceShipsPanel());
     }
 
     public void exit() {

@@ -1,21 +1,32 @@
 package arth.battleship.controller;
 
-import arth.battleship.connection.PlayerConnection;
-import arth.battleship.model.Lobby;
+import arth.battleship.constants.CommandLines;
+import arth.battleship.socket.PlayerConnection;
+import arth.battleship.model.Battleship;
+import arth.battleship.model.Player;
+
+import java.util.List;
+
 
 public class PlaceShipsController {
-    private Lobby lobby;
+    private Player player;
     private PlayerConnection playerConnection;
-    public PlaceShipsController(Lobby lobby, PlayerConnection playerConnection) {
-        this.lobby = lobby;
-        this.playerConnection = playerConnection;
+
+    public PlaceShipsController() {
+        player = new Player();
+        playerConnection = new PlayerConnection(player);
     }
 
-    public String ready(boolean selected, String name, String message) {
+    public String ready(boolean selected, String name, String ships) {
         if (selected) {
-            playerConnection.sendMessage("Name: " + name + ", message: " + message);
-            return "Ready";
+            // TODO
+            //  create list of battleships from user and send it to the server
+            Battleship battleship = new Battleship(ships.split(" "));
+            playerConnection.setReady(name, List.of(battleship));
+        } else {
+            playerConnection.sendMessage(CommandLines.NOT_READY);
         }
-        return "Not ready";
+
+        return selected ? CommandLines.READY : CommandLines.NOT_READY;
     }
 }
