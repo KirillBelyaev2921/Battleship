@@ -39,4 +39,8 @@ public class Lobby {
     public String toString() {
         return "Lobby: " + lobbyName;
     }
+
+    public void removePlayer(String address) {
+        players.remove(address);
+    }
 }

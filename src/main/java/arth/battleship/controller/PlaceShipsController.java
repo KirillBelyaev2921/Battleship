@@ -20,9 +20,9 @@ public class PlaceShipsController {
     public String ready(boolean selected, String name, List<Battleship> battleships) {
         if (selected) {
             playerConnection.setPlayer(new Player(name, battleships));
-            playerConnection.sendMessage(CommandLines.READY);
+            playerConnection.setPlayerName(CommandLines.READY, name);
         } else {
-            playerConnection.sendMessage(CommandLines.NOT_READY);
+            playerConnection.setPlayerName(CommandLines.NOT_READY, name);
         }
 
         return selected ? CommandLines.READY : CommandLines.NOT_READY;

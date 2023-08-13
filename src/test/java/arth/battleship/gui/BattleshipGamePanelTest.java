@@ -11,15 +11,13 @@ import java.awt.*;
 import java.awt.event.InputEvent;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class BattleshipGamePanelTest {
 
     @Test
     public void test() throws AWTException, InterruptedException {
         Lobby lobby = new Lobby("");
         List<Battleship> battleships1 = List.of(new Battleship("A1", "A2", "A3", "A4"),
-                new Battleship("A6", "A7", "A8"),
+                new Battleship("A8", "A9", "A10"),
                 new Battleship("C1", "C2", "C3"),
                 new Battleship("C5", "C6"),
                 new Battleship("C8", "C9"),
@@ -49,22 +47,17 @@ class BattleshipGamePanelTest {
         PlayerConnection connection2 = new PlayerConnection(player2);
 
 
+
         BattleshipFrame.getInstance().setMainPanel(new BattleshipGamePanel(connection));
 
         Robot robot = new Robot();
         robot.mouseMove(600, 620);
         robot.mousePress(InputEvent.BUTTON1_MASK);
         robot.mouseRelease(InputEvent.BUTTON1_MASK);
-        robot.mouseMove(580, 620);
-        robot.mousePress(InputEvent.BUTTON1_MASK);
-        robot.mouseRelease(InputEvent.BUTTON1_MASK);
-        robot.mouseMove(580, 580);
-        robot.mousePress(InputEvent.BUTTON1_MASK);
-        robot.mouseRelease(InputEvent.BUTTON1_MASK);
         robot.mouseMove(600, 580);
         robot.mousePress(InputEvent.BUTTON1_MASK);
+        robot.mouseRelease(InputEvent.BUTTON1_MASK);
 
         Thread.sleep(2000);
-        robot.mouseRelease(InputEvent.BUTTON1_MASK);
     }
 }

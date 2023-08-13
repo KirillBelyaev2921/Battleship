@@ -5,8 +5,8 @@ import arth.battleship.gui.BattleshipGamePanel;
 
 public class GameController {
 
-    PlayerConnection connection;
-    BattleshipGamePanel panel;
+    private final PlayerConnection connection;
+    private final BattleshipGamePanel panel;
     private String cell;
 
     public GameController(PlayerConnection connection, BattleshipGamePanel panel) {
@@ -22,7 +22,7 @@ public class GameController {
         }
     }
 
-    public void displayResult(String readLine) {
+    public void displayMessage(String readLine) {
         panel.displayResult(readLine);
     }
 
@@ -32,5 +32,30 @@ public class GameController {
 
     public String getCell() {
         return cell;
+    }
+
+    public void setTurn(boolean isPlayersTurn) {
+        panel.setTurn(isPlayersTurn);
+    }
+
+    public void shotResult(String command, String name, String cell, String result) {
+        panel.displayResult(result + command);
+        if (connection.getPlayer().getPlayerName().equals(name)) {
+            if (command.equals("Miss")) {
+                displayMessage("This is your opponent's turn");
+                setTurn(false);
+            } else {
+                displayMessage("It is your turn");
+            }
+            panel.setEnemyCell(command, cell);
+        } else {
+            if (command.equals("Miss")) {
+                displayMessage("It is your turn");
+                setTurn(true);
+            } else {
+                displayMessage("This is your opponent's turn");
+            }
+            panel.setMyCell(command, cell);
+        }
     }
 }

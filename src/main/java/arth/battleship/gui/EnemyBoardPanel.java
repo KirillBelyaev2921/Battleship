@@ -1,10 +1,7 @@
 package arth.battleship.gui;
 
-import arth.battleship.constants.CommandLines;
-import arth.battleship.controller.BoardController;
 import arth.battleship.controller.CellCoordinateFormatter;
 import arth.battleship.controller.GameController;
-import arth.battleship.model.Battleship;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,8 +13,7 @@ import java.util.List;
 public class EnemyBoardPanel extends JPanel {
     private GameController controller;
     private List<List<CellPanel>> cells;
-    private JCheckBox checkBox;
-    private boolean isTurn = true;
+    private boolean isTurn;
 
 
     public EnemyBoardPanel(GameController controller) {
@@ -55,8 +51,16 @@ public class EnemyBoardPanel extends JPanel {
         }
     }
 
-    public void setReady(boolean b) {
+    public void setTurn(boolean b) {
         this.isTurn = b;
+    }
+
+    public void setCell(String result, String cell) {
+        List<Integer> cellCoordinate = CellCoordinateFormatter.stringToNumericList(cell);
+        if (result.equals("Miss"))
+            cells.get(cellCoordinate.get(0) + 1).get(cellCoordinate.get(1)).setStatus(CellPanel.CellStatus.MISS);
+        else if (result.equals("Hit"))
+            cells.get(cellCoordinate.get(0) + 1).get(cellCoordinate.get(1)).setStatus(CellPanel.CellStatus.HIT);
     }
 
     private class ShipShootListener implements MouseListener {
@@ -65,38 +69,27 @@ public class EnemyBoardPanel extends JPanel {
         public void mousePressed(MouseEvent e) {
             if (isTurn) {
                 EnemyCellPanel cellPanel = (EnemyCellPanel) e.getComponent();
-                if (!cellPanel.isShot()) {
+                if (!cellPanel.notEmpty()) {
 
                     if (controller.getCell() != null) {
                         List<Integer> cell = CellCoordinateFormatter.stringToNumericList(controller.getCell());
-                        EnemyCellPanel cellPanel1 = (EnemyCellPanel) cells.get(cell.get(0) + 2).get(cell.get(1) + 1);
-                        cellPanel1.setShip(EnemyCellPanel.CellStatus.EMPTY);
+                        EnemyCellPanel cellPanel1 = (EnemyCellPanel) cells.get(cell.get(0) + 1).get(cell.get(1));
+                        cellPanel1.setStatus(CellPanel.CellStatus.EMPTY);
                     }
-                    controller.setCellToShot(cellPanel.getI() - 1, cellPanel.getJ() - 1);
-                    cellPanel.setShip(EnemyCellPanel.CellStatus.SELECTED);
+                    controller.setCellToShot(cellPanel.getI(), cellPanel.getJ());
+                    cellPanel.setStatus(EnemyCellPanel.CellStatus.SELECTED);
                     repaint();
                 }
             }
         }
+        @Override
+        public void mouseClicked(MouseEvent e) {}
+        @Override
+        public void mouseReleased(MouseEvent e) {}
 
         @Override
-        public void mouseClicked(MouseEvent e) {
-
-        }
-
+        public void mouseEntered(MouseEvent e) {}
         @Override
-        public void mouseReleased(MouseEvent e) {
-
-        }
-
-        @Override
-        public void mouseEntered(MouseEvent e) {
-
-        }
-
-        @Override
-        public void mouseExited(MouseEvent e) {
-
-        }
+        public void mouseExited(MouseEvent e) {}
     }
 }

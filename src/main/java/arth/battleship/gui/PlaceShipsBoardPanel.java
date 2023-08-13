@@ -60,12 +60,27 @@ public class PlaceShipsBoardPanel extends JPanel {
         }
     }
 
+    public void placeBattleships(List<Battleship> battleships) {
+        battleships.forEach(battleship ->
+                battleship.getShipCells()
+                        .forEach(s -> {
+                            List<Integer> cellCoordinate = CellCoordinateFormatter.stringToNumericList(s);
+                            cells.get(cellCoordinate.get(0) + 1).get(cellCoordinate.get(1)).setStatus(CellPanel.CellStatus.HIT);
+                        }));
+    }
+
     public List<Battleship> getBattleships() {
         return controller.getBattleships();
     }
 
     public void setReady(boolean b) {
         this.isReady = b;
+    }
+
+    public void setCell(String result, String cell) {
+        List<Integer> cellCoordinate = CellCoordinateFormatter.stringToNumericList(cell);
+        if (result.equals("Miss"))
+            cells.get(cellCoordinate.get(0) + 1).get(cellCoordinate.get(1)).setStatus(CellPanel.CellStatus.MISS);
     }
 
     private class ShipPlaceListener implements MouseListener {
@@ -75,9 +90,12 @@ public class PlaceShipsBoardPanel extends JPanel {
             if (!isReady) {
                 checkBox.setEnabled(false);
                 ShipCellPanel cellPanel = (ShipCellPanel) e.getComponent();
-                cellPanel.setShip(!cellPanel.isShip());
+                if (cellPanel.notEmpty())
+                    cellPanel.setStatus(CellPanel.CellStatus.EMPTY);
+                else
+                    cellPanel.setStatus(CellPanel.CellStatus.HIT);
 
-                String response = controller.updatePlayerBattleships(cellPanel.isShip(), cellPanel.getI(), cellPanel.getJ());
+                String response = controller.updatePlayerBattleships(cellPanel.notEmpty(), cellPanel.getI(), cellPanel.getJ());
                 checkBox.setText(response.equals(CommandLines.READY) ? CommandLines.NOT_READY : response);
                 checkBox.setEnabled(response.equals(CommandLines.READY));
                 repaint();

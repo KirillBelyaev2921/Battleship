@@ -34,6 +34,11 @@ public class PlayerConnection {
         this.player = player;
     }
 
+    public Player getPlayer() {
+        return player;
+    }
+
+
     private void setUpNetworking() {
         try {
             InetSocketAddress serverAddress = new InetSocketAddress("192.168.0.230", 5000);
@@ -48,9 +53,10 @@ public class PlayerConnection {
         }
     }
 
-    public void sendMessage(String s) {
+    public void setPlayerName(String s, String name) {
         try {
             writer.writeObject(s);
+            writer.writeObject(name);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -58,7 +64,7 @@ public class PlayerConnection {
 
     public void setReady(String name, List<Battleship> battleships) {
         try {
-            writer.writeObject(CommandLines.READY);
+            writer.writeObject(CommandLines.SET_PLAYERS);
             writer.writeObject(name);
             writer.writeObject(battleships);
         } catch (IOException e) {
@@ -86,8 +92,7 @@ public class PlayerConnection {
                 while ((message = reader.readLine()) != null) {
                     switch (message) {
                         case CommandLines.GAME_START -> startGame();
-                        case CommandLines.SHOT_RESULT -> controller.displayResult(reader.readLine());
-                        case CommandLines.SET_PLAYERS -> setReady(player.getPlayerName(), player.getBattleships());
+                        case CommandLines.SHOT_RESULT -> controller.shotResult(reader.readLine(), reader.readLine(), reader.readLine(), reader.readLine());
                     }
                 }
             } catch (IOException ex) {
@@ -96,7 +101,21 @@ public class PlayerConnection {
         }
     }
 
-    private void startGame() {
+    private void startGame() throws IOException {
+        setReady(player.getPlayerName(), player.getBattleships());
         BattleshipFrame.getInstance().setMainPanel(new BattleshipGamePanel(this));
+        controller.displayMessage("Game started!\n");
+        String address = reader.readLine();
+        showTurn(address);
+    }
+
+    private void showTurn(String name) {
+        if (this.player.getPlayerName().equals(name)) {
+            controller.displayMessage("It is your turn");
+            controller.setTurn(true);
+        } else {
+            controller.displayMessage("This is your opponent's turn");
+            controller.setTurn(false);
+        }
     }
 }

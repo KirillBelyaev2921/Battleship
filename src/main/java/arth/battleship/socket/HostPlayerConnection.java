@@ -15,6 +15,7 @@ import java.nio.channels.SocketChannel;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -24,8 +25,12 @@ public class HostPlayerConnection {
     private Lobby lobby;
 
     private List<PrintWriter> clientWriters = new ArrayList<>();
+    private List<String> addresses = new ArrayList<>();
+
 
     private int playersReadyCounter;
+
+    private int playerTurn;
 
     public HostPlayerConnection(Lobby lobby) {
         this.lobby = lobby;
@@ -39,10 +44,22 @@ public class HostPlayerConnection {
             writer.flush();
         }
     }
-    private void shoot(String command, String result) {
+
+    private void startGame(String message, String address) {
+        for (PrintWriter writer : clientWriters) {
+            writer.println(message);
+            writer.println(address);
+            writer.flush();
+        }
+    }
+
+    private void shoot(String command, String name, String cell, String result) {
         for (PrintWriter printWriter : clientWriters) {
             printWriter.println(CommandLines.SHOT_RESULT);
-            printWriter.println(result + command);
+            printWriter.println(command);
+            printWriter.println(name);
+            printWriter.println(cell);
+            printWriter.println(result);
             printWriter.flush();
         }
     }
@@ -72,6 +89,7 @@ public class HostPlayerConnection {
         public ClientHandler(SocketChannel clientSocket) {
             try {
                 address = clientSocket.getRemoteAddress().toString();
+                addresses.add(address);
                 reader = new ObjectInputStream(Channels.newInputStream(clientSocket));
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -87,10 +105,12 @@ public class HostPlayerConnection {
                     switch (command) {
                         case CommandLines.READY -> {
                             playersReadyCounter++;
+                            lobby.addPlayer(address, new Player((String) reader.readObject(), null));
                             checkPlayersIsReady();
                         }
                         case CommandLines.NOT_READY -> {
                             playersReadyCounter--;
+                            lobby.removePlayer(address);
                             checkPlayersIsReady();
                         }
                         case CommandLines.SHOOT -> {
@@ -100,14 +120,13 @@ public class HostPlayerConnection {
                                     " shoot " + cell + ". Result: ";
                             if (secondPlayer.getBattleships().stream()
                                     .noneMatch(battleship -> battleship.getShipCells().stream().noneMatch(cell::equals))) {
-                                shoot("Hit", shoot);
+                                shoot("Hit", lobby.getPlayer(address).getPlayerName(), cell, shoot);
                             } else {
-                                shoot("Miss", shoot);
+                                shoot("Miss", lobby.getPlayer(address).getPlayerName(), cell, shoot);
+                                playerTurn = playerTurn == 0 ? 1 : 0;
                             }
                         }
-                        case CommandLines.SET_PLAYERS -> {
-                            setPlayer();
-                        }
+                        case CommandLines.SET_PLAYERS -> setPlayer();
                     }
                 }
             } catch (IOException e) {
@@ -119,11 +138,13 @@ public class HostPlayerConnection {
         }
 
         private void setPlayer() {
+            tellEveryone(CommandLines.SET_PLAYERS);
             String name = null;
             List<Battleship> battleships = null;
             try {
                 name = (String) reader.readObject();
                 battleships = (List<Battleship>) reader.readObject();
+
 
             } catch (IOException | ClassNotFoundException e) {
                 throw new RuntimeException(e);
@@ -135,9 +156,14 @@ public class HostPlayerConnection {
 
         private void checkPlayersIsReady() {
             if (playersReadyCounter == 2) {
-                tellEveryone(CommandLines.GAME_START);
+                setFirstTurn();;
+                startGame(CommandLines.GAME_START, lobby.getPlayer(addresses.get(playerTurn)).getPlayerName());
             }
         }
 
+    }
+
+    private void setFirstTurn() {
+        playerTurn = new Random().nextInt(2);
     }
 }
