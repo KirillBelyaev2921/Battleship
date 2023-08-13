@@ -13,9 +13,7 @@ import java.nio.channels.Channels;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -26,11 +24,8 @@ public class HostPlayerConnection {
 
     private List<PrintWriter> clientWriters = new ArrayList<>();
     private List<String> addresses = new ArrayList<>();
-
-
     private int playersReadyCounter;
 
-    private int playerTurn;
 
     public HostPlayerConnection(Lobby lobby) {
         this.lobby = lobby;
@@ -118,13 +113,9 @@ public class HostPlayerConnection {
                             Player secondPlayer = lobby.getSecondPlayer(address);
                             String shoot = lobby.getPlayer(address).getPlayerName() +
                                     " shoot " + cell + ". Result: ";
-                            if (secondPlayer.getBattleships().stream()
-                                    .noneMatch(battleship -> battleship.getShipCells().stream().noneMatch(cell::equals))) {
-                                shoot("Hit", lobby.getPlayer(address).getPlayerName(), cell, shoot);
-                            } else {
-                                shoot("Miss", lobby.getPlayer(address).getPlayerName(), cell, shoot);
-                                playerTurn = playerTurn == 0 ? 1 : 0;
-                            }
+
+                            shoot(hitShip(secondPlayer, cell), lobby.getPlayer(address).getPlayerName(), cell, shoot);
+
                         }
                         case CommandLines.SET_PLAYERS -> setPlayer();
                     }
@@ -135,6 +126,23 @@ public class HostPlayerConnection {
                 System.out.println("Wrong client version!");
                 throw new RuntimeException(e);
             }
+        }
+
+        private String hitShip(Player secondPlayer, String cell) {
+            String result = "Miss";
+            for (Battleship battleship : secondPlayer.getBattleships()) {
+                if (battleship.getShipCells().removeIf(cell::equals))
+                    result = "Hit";
+                if (battleship.getShipCells().size() == 0) {
+                    secondPlayer.removeBattleship(battleship);
+                    result = "Kill";
+                    break;
+                }
+            }
+            if (secondPlayer.getBattleships().size() == 0)
+                result = "Win";
+
+            return result;
         }
 
         private void setPlayer() {
@@ -156,14 +164,9 @@ public class HostPlayerConnection {
 
         private void checkPlayersIsReady() {
             if (playersReadyCounter == 2) {
-                setFirstTurn();;
-                startGame(CommandLines.GAME_START, lobby.getPlayer(addresses.get(playerTurn)).getPlayerName());
+                startGame(CommandLines.GAME_START, lobby.getPlayer(addresses.get(new Random().nextInt(2))).getPlayerName());
             }
         }
 
-    }
-
-    private void setFirstTurn() {
-        playerTurn = new Random().nextInt(2);
     }
 }

@@ -1,5 +1,6 @@
 package arth.battleship.controller;
 
+import arth.battleship.gui.BattleshipFrame;
 import arth.battleship.socket.PlayerConnection;
 import arth.battleship.gui.BattleshipGamePanel;
 
@@ -44,16 +45,22 @@ public class GameController {
             if (command.equals("Miss")) {
                 displayMessage("This is your opponent's turn");
                 setTurn(false);
-            } else {
+            } else if (command.equals("Kill") || command.equals("Hit")){
                 displayMessage("It is your turn");
+            } else {
+                displayMessage("You Won!");
+                setTurn(false);
             }
             panel.setEnemyCell(command, cell);
         } else {
             if (command.equals("Miss")) {
                 displayMessage("It is your turn");
                 setTurn(true);
-            } else {
+            } else if (command.equals("Kill") || command.equals("Hit")){
                 displayMessage("This is your opponent's turn");
+            } else {
+                displayMessage("You Lose");
+                setTurn(false);
             }
             panel.setMyCell(command, cell);
         }

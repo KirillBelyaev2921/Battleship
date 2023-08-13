@@ -59,7 +59,7 @@ public class EnemyBoardPanel extends JPanel {
         List<Integer> cellCoordinate = CellCoordinateFormatter.stringToNumericList(cell);
         if (result.equals("Miss"))
             cells.get(cellCoordinate.get(0) + 1).get(cellCoordinate.get(1)).setStatus(CellPanel.CellStatus.MISS);
-        else if (result.equals("Hit"))
+        else if (result.equals("Hit") || result.equals("Kill") || result.equals("Win"))
             cells.get(cellCoordinate.get(0) + 1).get(cellCoordinate.get(1)).setStatus(CellPanel.CellStatus.HIT);
     }
 

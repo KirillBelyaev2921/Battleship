@@ -26,16 +26,7 @@ public class Player implements Serializable {
         return battleships;
     }
 
-    public void setPlayerName(String playerName) {
-        this.playerName = playerName;
+    public void removeBattleship(Battleship battleship) {
+        battleships.remove(battleship);
     }
-
-    public void setBattleships(List<Battleship> battleships) {
-        this.battleships = battleships;
-    }
-
-    public void addBattleship(Battleship battleship) {
-        this.battleships.add(battleship);
-    }
-
 }
