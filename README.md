@@ -1,13 +1,26 @@
 # Battleship
 Battleship on Swing that allows plays two players on the same local network
 
-My first big and completed (somehow) project, for the Battleship game on two players. 
-The idea is to play Battleship in local network, using most of my knowlege and skills 
-to write it. I am not wery good and using sockets and threads, so it was my first project,
-where I used them. In the end, my code became more complicated and bad, and also there are many
-bugs and mistakes, that I don't know how to fix (for example, how to break the connection when user just close Frame).
-In the future, I will work on this project, when I learn about (such as javadoc and more for sockets).
+First version was just working Battleship game, but there were many different problems.
+This version 2 is going to make user interface more friendly and to refactor some code, 
+that became a bit too bad at the end.
 
-In the end, this project was made after I read the book "Head First Java" by Kathy Sierra, ‎Bert Bates, ‎Trisha Gee.
-It was very usefull for me to structure my knowledge and learn new things. After some more books I will return and
-change it into the real multiplayer Battleship game.
+I will do next tasks:
+- add better UML documentation;
+- delete JTextArea from game and add label to show results;
+- add different shapes/colors to ships on both sides, if they hitted or killed;
+- remove all logic from host thread, now it will only exchange commands and messages, and also list;
+- add dots around the ship, if it killed;
+- create cell classes and some subclasses;
+- change BattleshipBuilder and Battleship classes for changes above;
+- delete button for creating lobby - first player will create it automatically;
+- delete lobby name and player name.
+
+I want to implement some tasks (in this version or in next ones):
+- hide/show players board if he don't need it;
+- create lobby list;
+- making "miss" dots by player itself and undo them (for some reason) (they will be different colour/shape);
+- show tips on cell statuces (what colour and shape means);
+- add ship list on preparation panel (how much you need and how many you placed.
+
+  This lists can be updated anytime, and many tasks was not included due to lack of knowledge.
