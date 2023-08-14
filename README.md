@@ -1,6 +1,8 @@
 # Battleship
 Battleship on Swing that allows plays two players on the same local network
 
+This is snapshot of version 1 of programm.
+
 My first big and completed (somehow) project, for the Battleship game on two players. 
 The idea is to play Battleship in local network, using most of my knowlege and skills 
 to write it. I am not wery good and using sockets and threads, so it was my first project,
