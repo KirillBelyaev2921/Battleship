@@ -3,12 +3,17 @@ package arth.battleship.controller;
 import arth.battleship.gui.BattleshipFrame;
 import arth.battleship.gui.MainMenuPanel;
 
-public class BattleshipController {
-    BattleshipFrame frame;
+import javax.swing.*;
 
-    public void start() {
+public class BattleshipController {
+    private final BattleshipFrame frame;
+
+    public BattleshipController() {
         frame = BattleshipFrame.getInstance();
-        frame.setMainPanel(new MainMenuPanel());
+    }
+
+    public void setMainPanel(JPanel panel) {
+        frame.setMainPanel(panel);
     }
 
 }

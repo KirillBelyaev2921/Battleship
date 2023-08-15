@@ -1,22 +1,16 @@
 package arth.battleship.controller;
 
-import arth.battleship.gui.BattleshipFrame;
 import arth.battleship.gui.CreateLobbyPanel;
-import arth.battleship.gui.PlaceShipsPanel;
+import arth.battleship.gui.PlaceBattleshipsPanel;
 
-public class MainMenuController {
-    BattleshipFrame frame;
-
-    public MainMenuController() {
-        this.frame = BattleshipFrame.getInstance();
-    }
+public class MainMenuController extends BattleshipController {
 
     public void createLobby() {
-        frame.setMainPanel(new CreateLobbyPanel());
+        setMainPanel(new CreateLobbyPanel());
     }
 
     public void chooseLobby() {
-        frame.setMainPanel(new PlaceShipsPanel());
+        setMainPanel(new PlaceBattleshipsPanel());
     }
 
     public void exit() {

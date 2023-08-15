@@ -92,7 +92,8 @@ public class PlayerConnection {
                 while ((message = reader.readLine()) != null) {
                     switch (message) {
                         case CommandLines.GAME_START -> startGame();
-                        case CommandLines.SHOT_RESULT -> controller.shotResult(reader.readLine(), reader.readLine(), reader.readLine(), reader.readLine());
+                        case CommandLines.SHOT_RESULT ->
+                                controller.shotResult(reader.readLine(), reader.readLine(), reader.readLine(), reader.readLine());
                     }
                 }
             } catch (IOException ex) {

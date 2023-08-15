@@ -1,8 +1,6 @@
 package arth.battleship.model;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class Lobby {
@@ -14,7 +12,7 @@ public class Lobby {
         players = new HashMap<>();
     }
 
-    public void addPlayer(String address,Player player) {
+    public void addPlayer(String address, Player player) {
         players.put(address, player);
     }
 

@@ -4,17 +4,36 @@ import arth.battleship.constants.CommandLines;
 import arth.battleship.exception.DiagonalCellPlacedException;
 import arth.battleship.exception.InvalidBattleshipSizeException;
 import arth.battleship.exception.InvalidNumberOfShipsOfOneSizeException;
+import arth.battleship.socket.PlayerConnection;
 import arth.battleship.model.Battleship;
+import arth.battleship.model.Player;
 
 import java.util.List;
 
-public class BoardController {
+
+public class PlaceBattleshipsController extends BattleshipController {
+    private Player player;
+    private PlayerConnection playerConnection;
     private BattleshipsBuilder builder;
     private List<Battleship> battleships;
 
-    public BoardController() {
+    public PlaceBattleshipsController() {
+        player = new Player();
+        playerConnection = new PlayerConnection(player);
         this.builder = new BattleshipsBuilder();
     }
+
+    public String ready(boolean selected, String name) {
+        if (selected) {
+            playerConnection.setPlayer(new Player(name, battleships));
+            playerConnection.setPlayerName(CommandLines.READY, name);
+        } else {
+            playerConnection.setPlayerName(CommandLines.NOT_READY, name);
+        }
+
+        return selected ? CommandLines.READY : CommandLines.NOT_READY;
+    }
+
 
     public String updatePlayerBattleships(boolean isShip, int i, int j) {
         try {
@@ -35,9 +54,5 @@ public class BoardController {
             return CommandLines.READY;
         }
         return CommandLines.NOT_READY;
-    }
-
-    public List<Battleship> getBattleships() {
-        return battleships;
     }
 }

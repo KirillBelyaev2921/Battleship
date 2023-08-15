@@ -4,6 +4,7 @@ import arth.battleship.exception.DiagonalCellPlacedException;
 import arth.battleship.exception.InvalidBattleshipSizeException;
 import arth.battleship.exception.InvalidNumberOfShipsOfOneSizeException;
 import arth.battleship.model.Battleship;
+import arth.battleship.model.Cell;
 
 import java.util.*;
 
@@ -148,22 +149,22 @@ public class BattleshipsBuilder {
                 battleshipsSizesCount.get(4) > 1) {
             throw new InvalidNumberOfShipsOfOneSizeException();
         }
+
         return battleshipsSizesCount.get(1) == 4 &&
                 battleshipsSizesCount.get(2) == 3 &&
                 battleshipsSizesCount.get(3) == 2 &&
                 battleshipsSizesCount.get(4) == 1;
-
     }
 
     public List<Battleship> build() {
         List<Battleship> battleships = new ArrayList<>();
-        List<String> strings = null;
+        List<Cell> cells = null;
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
                 if (board[i][j] == CellStatus.SHIP) {
-                    strings = new ArrayList<>();
-                    makeBattleship(i, j, strings);
-                    Battleship battleship = new Battleship(strings.toArray(String[]::new));
+                    cells = new ArrayList<>();
+                    makeBattleship(i, j, cells);
+                    Battleship battleship = new Battleship(cells);
                     battleships.add(battleship);
                 }
             }
@@ -171,21 +172,21 @@ public class BattleshipsBuilder {
         return battleships;
     }
 
-    private void makeBattleship(int i, int j, List<String> strings) {
+    private void makeBattleship(int i, int j, List<Cell> cells) {
         if (i < 0 || j < 0 || i >= 10 || j >= 10)
             return;
         if (board[i][j] == CellStatus.EMPTY || board[i][j] == CellStatus.SHIP_COUNTED)
             return;
 
         if (board[i][j] == CellStatus.SHIP) {
-            strings.add(CellCoordinateFormatter.numericToString(i, j));
+            cells.add(new Cell(i, j));
             board[i][j] = CellStatus.SHIP_COUNTED;
         }
 
-        makeBattleship(i - 1, j, strings);
-        makeBattleship(i + 1, j, strings);
-        makeBattleship(i, j - 1, strings);
-        makeBattleship(i, j + 1, strings);
+        makeBattleship(i - 1, j, cells);
+        makeBattleship(i + 1, j, cells);
+        makeBattleship(i, j - 1, cells);
+        makeBattleship(i, j + 1, cells);
     }
 
     private enum CellStatus {

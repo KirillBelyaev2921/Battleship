@@ -131,7 +131,7 @@ public class HostPlayerConnection {
         private String hitShip(Player secondPlayer, String cell) {
             String result = "Miss";
             for (Battleship battleship : secondPlayer.getBattleships()) {
-                if (battleship.getShipCells().removeIf(cell::equals))
+                if (battleship.getShipCells().removeIf(cell1 -> cell1.getStringCell().equals(cell)))
                     result = "Hit";
                 if (battleship.getShipCells().size() == 0) {
                     secondPlayer.removeBattleship(battleship);

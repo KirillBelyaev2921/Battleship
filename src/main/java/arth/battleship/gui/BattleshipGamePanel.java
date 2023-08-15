@@ -1,5 +1,8 @@
 package arth.battleship.gui;
 
+import arth.battleship.gui.BoardPanel.EnemyBoardPanel;
+import arth.battleship.gui.BoardPanel.PlayerBoardPanel;
+import arth.battleship.model.Cell;
 import arth.battleship.socket.PlayerConnection;
 import arth.battleship.controller.GameController;
 
@@ -9,9 +12,8 @@ public class BattleshipGamePanel extends JPanel {
     private GameController controller;
     private JLabel gameLabel;
     private JTextArea turns;
-    private PlaceShipsBoardPanel placeShipsBoardPanel;
+    private PlayerBoardPanel playerBoardPanel;
     private EnemyBoardPanel enemyBoardPanel;
-    private JPanel boards;
     private JButton shootButton;
 
     public BattleshipGamePanel(PlayerConnection connection) {
@@ -24,25 +26,32 @@ public class BattleshipGamePanel extends JPanel {
         turns.setLineWrap(true);
         turns.setWrapStyleWord(true);
         turns.setEditable(false);
+        JPanel boards = new JPanel();
         JScrollPane theList = new JScrollPane(turns);
         theList.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         theList.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         theList.setAutoscrolls(true);
         theList.setCorner(ScrollPaneConstants.LOWER_LEFT_CORNER, new JLabel());
-        boards = new JPanel();
-        placeShipsBoardPanel = new PlaceShipsBoardPanel(true);
-        placeShipsBoardPanel.placeBattleships(connection.getPlayer().getBattleships());
-        boards.add(placeShipsBoardPanel);
+        playerBoardPanel = new PlayerBoardPanel();
+        playerBoardPanel.placeBattleships(connection.getPlayer().getBattleships());
+        boards.add(playerBoardPanel);
         enemyBoardPanel = new EnemyBoardPanel(controller);
         boards.add(enemyBoardPanel);
 
         shootButton = new JButton("Shoot");
-        shootButton.addActionListener(e -> controller.shootShip());
+        shootButton.addActionListener(e -> shootShip());
 
         this.add(gameLabel);
         this.add(theList);
         this.add(boards);
         this.add(shootButton);
+    }
+
+    private void shootShip() {
+        Cell cellToShoot = enemyBoardPanel.getCellToShoot();
+        if (cellToShoot != null)
+            controller.shootShip(cellToShoot);
+        enemyBoardPanel.setCellToNull();
     }
 
     public void displayResult(String readLine) {
@@ -59,7 +68,7 @@ public class BattleshipGamePanel extends JPanel {
     }
 
     public void setMyCell(String result, String cell) {
-        placeShipsBoardPanel.setCell(result, cell);
+        playerBoardPanel.setCell(result, cell);
         repaint();
     }
 }

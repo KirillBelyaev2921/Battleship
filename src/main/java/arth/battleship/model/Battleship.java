@@ -1,6 +1,5 @@
 package arth.battleship.model;
 
-import arth.battleship.controller.CellCoordinateFormatter;
 import arth.battleship.exception.InvalidBattleshipCellsPlacementException;
 import arth.battleship.exception.InvalidBattleshipSizeException;
 
@@ -9,10 +8,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static arth.battleship.constants.BattleshipGameSettings.*;
+
 public class Battleship implements Serializable {
-    public static final int BATTLESHIP_MAX_SIZE = 4;
-    private final List<String> shipCells;
-    public static final int BOARD_SIZE = 10;
+    private final List<Cell> shipCells;
 
     public Battleship(String... shipCells) {
         if (!isCorrectSize(shipCells))
@@ -20,7 +19,11 @@ public class Battleship implements Serializable {
         if (!isCorrectPlacement(shipCells)) {
             throw new InvalidBattleshipCellsPlacementException();
         }
-        this.shipCells = Arrays.stream(shipCells).map(String::toUpperCase).collect(Collectors.toList());
+        this.shipCells = Arrays.stream(shipCells).map(Cell::new).collect(Collectors.toList());
+    }
+
+    public Battleship(List<Cell> cells) {
+        this(cells.stream().map(Cell::getStringCell).toArray(String[]::new));
     }
 
     private boolean isCorrectPlacement(String[] shipCells) {
@@ -30,11 +33,11 @@ public class Battleship implements Serializable {
         List<Integer> horizontal;
         try {
             vertical = Arrays.stream(shipCells)
-                    .map(s -> CellCoordinateFormatter.stringToNumericList(s).get(0) + 1)
+                    .map(s -> new Cell(s).getI())
                     .toList();
 
             horizontal = Arrays.stream(shipCells)
-                    .map(s -> CellCoordinateFormatter.stringToNumericList(s).get(1))
+                    .map(s -> new Cell(s).getJ())
                     .toList();
         } catch (IndexOutOfBoundsException | NumberFormatException e) {
             return false;
@@ -59,7 +62,7 @@ public class Battleship implements Serializable {
 
     private boolean isCorrectPlacementCells(List<Integer> cellCoordinates) {
         return cellCoordinates.stream()
-                .noneMatch(s -> s <= 0 || s > BOARD_SIZE);
+                .noneMatch(s -> s < 0 || s >= BOARD_SIZE);
     }
 
     private boolean isDirectionPlacementCorrect(List<Integer> horizontal) {
@@ -86,7 +89,7 @@ public class Battleship implements Serializable {
         return shipCells.length > 0 && shipCells.length <= BATTLESHIP_MAX_SIZE;
     }
 
-    public List<String> getShipCells() {
+    public List<Cell> getShipCells() {
         return shipCells;
     }
 

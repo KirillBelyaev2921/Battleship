@@ -1,19 +1,16 @@
-package arth.battleship.gui;
+package arth.battleship.gui.CellPanel;
+
+import arth.battleship.model.Cell;
 
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 
-public class EnemyCellPanel extends CellPanel {
-    private static final int CELL_SIZE = 30;
-    private final int i;
-    private final int j;
+public class EnemyBattleshipCellPanel extends BattleshipCellPanel {
 
-    public EnemyCellPanel(int i, int j) {
-        this.setPreferredSize(new Dimension(CELL_SIZE, CELL_SIZE));
-        this.i = i;
-        this.j = j;
+    public EnemyBattleshipCellPanel(Cell cell) {
+        super(cell);
     }
 
     @Override
@@ -25,13 +22,13 @@ public class EnemyCellPanel extends CellPanel {
         g2d.fill(cell);
 
 
-        if (getStatus() == CellPanel.CellStatus.SELECTED)
+        if (getStatus() == CellStatus.SELECTED)
             g2d.setColor(Color.RED);
         else
             g2d.setColor(Color.BLACK);
         g2d.draw(cell);
 
-        if (getStatus() == CellPanel.CellStatus.HIT) {
+        if (getStatus() == CellStatus.HIT) {
             g2d.setStroke(new BasicStroke(2));
             Line2D cross1 = new Line2D.Double(0, 0, CELL_SIZE, CELL_SIZE);
             Line2D cross2 = new Line2D.Double(0, CELL_SIZE, CELL_SIZE, 0);
@@ -40,16 +37,8 @@ public class EnemyCellPanel extends CellPanel {
         }
 
         if (getStatus() == CellStatus.MISS) {
-            Ellipse2D dot = new Ellipse2D.Double(CELL_SIZE/2 - 5, CELL_SIZE/2 - 5, 10, 10);
+            Ellipse2D dot = new Ellipse2D.Double(CELL_SIZE / 2 - 5, CELL_SIZE / 2 - 5, 10, 10);
             g2d.fill(dot);
         }
-    }
-
-    public int getI() {
-        return i;
-    }
-
-    public int getJ() {
-        return j;
     }
 }

@@ -1,10 +1,9 @@
-package arth.battleship.gui;
+package arth.battleship.gui.CellPanel;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class LabelCellPanel extends CellPanel {
-    private static final int CELL_SIZE = 30;
     public LabelCellPanel(String label) {
         this.setPreferredSize(new Dimension(CELL_SIZE, CELL_SIZE));
         this.setLayout(new BorderLayout());
