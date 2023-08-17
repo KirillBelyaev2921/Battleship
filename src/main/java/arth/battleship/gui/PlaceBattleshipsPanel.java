@@ -1,10 +1,11 @@
 package arth.battleship.gui;
 
-import arth.battleship.constants.CommandLines;
 import arth.battleship.controller.PlaceBattleshipsController;
 import arth.battleship.gui.BoardPanel.PlaceBattleshipsBoardPanel;
 
 import javax.swing.*;
+
+import static arth.battleship.constants.CommandLine.NOT_READY;
 
 public class PlaceBattleshipsPanel extends JPanel {
     private PlaceBattleshipsController controller;
@@ -20,7 +21,7 @@ public class PlaceBattleshipsPanel extends JPanel {
 
         playerNameLabel = new JLabel("Enter name");
         playerName = new JTextField();
-        isReady = new JCheckBox(CommandLines.NOT_READY);
+        isReady = new JCheckBox(NOT_READY.toString());
         isReady.addActionListener(e -> ready());
         isReady.setEnabled(false);
         board = new PlaceBattleshipsBoardPanel(isReady, controller);

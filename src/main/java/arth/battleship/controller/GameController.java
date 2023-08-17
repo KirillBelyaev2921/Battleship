@@ -1,5 +1,6 @@
 package arth.battleship.controller;
 
+import arth.battleship.constants.ShotResult;
 import arth.battleship.model.Cell;
 import arth.battleship.socket.PlayerSocket;
 import arth.battleship.gui.BattleshipGamePanel;
@@ -16,7 +17,7 @@ public class GameController extends BattleshipController {
     }
 
     public void shootShip(Cell cellToShoot) {
-        connection.shootShip(cellToShoot.getStringCell());
+        connection.shootShip(cellToShoot);
     }
 
     public void displayMessage(String readLine) {
@@ -27,32 +28,31 @@ public class GameController extends BattleshipController {
         panel.setTurn(isPlayersTurn);
     }
 
-    public void shotResult(String command, String name, String cell) {
-        String result = name +
-                " shoot " + cell + ". Result: ";
-        panel.displayResult(result + command);
-        if (connection.getPlayer().getPlayerName().equals(name)) {
-            if (command.equals("Miss")) {
-                displayMessage("This is your opponent's turn");
-                setTurn(false);
-            } else if (command.equals("Kill") || command.equals("Hit")) {
-                displayMessage("It is your turn");
-            } else {
-                displayMessage("You Won!");
-                setTurn(false);
-            }
-            panel.setEnemyCell(command, cell);
+    public void shotResult(ShotResult shotResult) {
+        if (shotResult == ShotResult.MISS) {
+            displayMessage("This is your opponent's turn");
+            setTurn(false);
+        } else if (shotResult == ShotResult.KILL || shotResult == ShotResult.HIT) {
+            displayMessage("It is your turn");
         } else {
-            if (command.equals("Miss")) {
-                displayMessage("It is your turn");
-                setTurn(true);
-            } else if (command.equals("Kill") || command.equals("Hit")) {
-                displayMessage("This is your opponent's turn");
-            } else {
-                displayMessage("You Lose");
-                setTurn(false);
-            }
-            panel.setMyCell(command, cell);
+            displayMessage("You Won!");
+            setTurn(false);
         }
+        panel.setEnemyCell(shotResult);
+    }
+
+    public ShotResult getShotResult(Cell cell) {
+        ShotResult shotCell = connection.getPlayer().shotCell(cell);
+        if (shotCell == ShotResult.MISS) {
+            displayMessage("It is your turn");
+            setTurn(true);
+        } else if (shotCell == ShotResult.KILL || shotCell == ShotResult.HIT) {
+            displayMessage("This is your opponent's turn");
+        } else {
+            displayMessage("You Lose");
+            setTurn(false);
+        }
+        panel.setMyCell(shotCell.toString(), cell);
+        return shotCell;
     }
 }

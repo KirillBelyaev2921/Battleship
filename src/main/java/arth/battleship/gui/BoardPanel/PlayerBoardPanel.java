@@ -17,9 +17,8 @@ public class PlayerBoardPanel extends BoardPanel {
                 .forEach(cell -> getBattleshipCellPanelByCell(cell).setStatus(BattleshipCellPanel.CellStatus.SHIP)));
     }
 
-    public void setCell(String result, String cell) {
-        Cell cellCoordinate = new Cell(cell);
+    public void setCell(String result, Cell cell) {
         if (result.equals("Miss"))
-            getBattleshipCellPanelByCell(cellCoordinate).setStatus(BattleshipCellPanel.CellStatus.MISS);
+            getBattleshipCellPanelByCell(cell).setStatus(BattleshipCellPanel.CellStatus.MISS);
     }
 }

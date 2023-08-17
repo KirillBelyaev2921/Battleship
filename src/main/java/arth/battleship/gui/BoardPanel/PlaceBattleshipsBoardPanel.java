@@ -1,7 +1,7 @@
 package arth.battleship.gui.BoardPanel;
 
 import arth.battleship.constants.BattleshipCellPanelType;
-import arth.battleship.constants.CommandLines;
+import arth.battleship.constants.CommandLine;
 import arth.battleship.controller.PlaceBattleshipsController;
 import arth.battleship.gui.CellPanel.BattleshipCellPanel;
 import arth.battleship.gui.CellPanel.PlaceBattleshipCellPanel;
@@ -9,6 +9,9 @@ import arth.battleship.gui.CellPanel.PlaceBattleshipCellPanel;
 import javax.swing.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+
+import static arth.battleship.constants.CommandLine.NOT_READY;
+import static arth.battleship.constants.CommandLine.READY;
 
 public class PlaceBattleshipsBoardPanel extends BoardPanel {
     private PlaceBattleshipsController controller;
@@ -44,8 +47,8 @@ public class PlaceBattleshipsBoardPanel extends BoardPanel {
                     cellPanel.setStatus(BattleshipCellPanel.CellStatus.HIT);
 
                 String response = controller.updatePlayerBattleships(cellPanel.notEmpty(), cellPanel.getCell().getI(), cellPanel.getCell().getJ());
-                isReadyCheckBox.setText(response.equals(CommandLines.READY) ? CommandLines.NOT_READY : response);
-                isReadyCheckBox.setEnabled(response.equals(CommandLines.READY));
+                isReadyCheckBox.setText(response.equals(READY.toString()) ? NOT_READY.toString() : response);
+                isReadyCheckBox.setEnabled(response.equals(READY.toString()));
                 repaint();
             }
         }

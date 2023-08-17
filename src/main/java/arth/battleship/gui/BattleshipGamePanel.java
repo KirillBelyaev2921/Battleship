@@ -1,5 +1,6 @@
 package arth.battleship.gui;
 
+import arth.battleship.constants.ShotResult;
 import arth.battleship.gui.BoardPanel.EnemyBoardPanel;
 import arth.battleship.gui.BoardPanel.PlayerBoardPanel;
 import arth.battleship.model.Cell;
@@ -51,7 +52,6 @@ public class BattleshipGamePanel extends JPanel {
         Cell cellToShoot = enemyBoardPanel.getCellToShoot();
         if (cellToShoot != null)
             controller.shootShip(cellToShoot);
-        enemyBoardPanel.setCellToNull();
     }
 
     public void displayResult(String readLine) {
@@ -62,12 +62,12 @@ public class BattleshipGamePanel extends JPanel {
         enemyBoardPanel.setTurn(isPlayerTurn);
     }
 
-    public void setEnemyCell(String result, String cell) {
-        enemyBoardPanel.setCell(result, cell);
+    public void setEnemyCell(ShotResult result) {
+        enemyBoardPanel.setCell(result);
         repaint();
     }
 
-    public void setMyCell(String result, String cell) {
+    public void setMyCell(String result, Cell cell) {
         playerBoardPanel.setCell(result, cell);
         repaint();
     }

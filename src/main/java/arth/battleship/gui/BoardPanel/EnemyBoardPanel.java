@@ -1,6 +1,7 @@
 package arth.battleship.gui.BoardPanel;
 
 import arth.battleship.constants.BattleshipCellPanelType;
+import arth.battleship.constants.ShotResult;
 import arth.battleship.controller.GameController;
 import arth.battleship.gui.CellPanel.BattleshipCellPanel;
 import arth.battleship.gui.CellPanel.EnemyBattleshipCellPanel;
@@ -32,21 +33,18 @@ public class EnemyBoardPanel extends BoardPanel {
         this.isTurn = b;
     }
 
-    public void setCell(String result, String cell) {
-        Cell cellCoordinate = new Cell(cell);
-        if (result.equals("Miss"))
-            getBattleshipCellPanelByCell(cellCoordinate).setStatus(BattleshipCellPanel.CellStatus.MISS);
-        else if (result.equals("Hit") || result.equals("Kill") || result.equals("Win"))
-            getBattleshipCellPanelByCell(cellCoordinate).setStatus(BattleshipCellPanel.CellStatus.HIT);
+    public void setCell(ShotResult result) {
+        if (result == ShotResult.MISS)
+            getBattleshipCellPanelByCell(cellToShoot).setStatus(BattleshipCellPanel.CellStatus.MISS);
+        else
+            getBattleshipCellPanelByCell(cellToShoot).setStatus(BattleshipCellPanel.CellStatus.HIT);
+        cellToShoot = null;
     }
 
     public Cell getCellToShoot() {
         return cellToShoot;
     }
 
-    public void setCellToNull() {
-        cellToShoot = null;
-    }
 
     private class ShipShootListener implements MouseListener {
         @Override
