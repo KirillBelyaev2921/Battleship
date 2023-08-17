@@ -45,8 +45,8 @@ public class PlayerSocket {
             InetSocketAddress serverAddress = new InetSocketAddress("192.168.0.230", 5000);
             SocketChannel socketChannel = SocketChannel.open(serverAddress);
 
-            writer = new ObjectOutputStream(Channels.newOutputStream(socketChannel));
-            reader = new ObjectInputStream(Channels.newInputStream(socketChannel));
+            writer = new ObjectOutputStream(socketChannel.socket().getOutputStream());
+            reader = new ObjectInputStream(socketChannel.socket().getInputStream());
 
             System.out.println("Network established!");
         } catch (IOException e) {
@@ -56,8 +56,7 @@ public class PlayerSocket {
 
     public void setReady() {
         try {
-            writer.writeObject("asd");
-            writer.writeObject("azxc");
+            writer.writeObject(READY);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -65,8 +64,7 @@ public class PlayerSocket {
 
     public void setNotReady() {
         try {
-            writer.writeObject("asd");
-            System.out.println("asd");
+            writer.writeObject(NOT_READY);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -74,7 +72,7 @@ public class PlayerSocket {
 
     public void shootShip(Cell cell) {
         try {
-            writer.writeChars(SHOT.name());
+            writer.writeObject(SHOT);
             writer.writeObject(cell);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -83,7 +81,7 @@ public class PlayerSocket {
 
     private void setShotResult(ShotResult shotResult) {
         try {
-            writer.writeChars(SET_SHOT_RESULT.name());
+            writer.writeObject(SET_SHOT_RESULT);
             writer.writeObject(shotResult);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -95,10 +93,10 @@ public class PlayerSocket {
     }
     public class IncomingReader implements Runnable {
         public void run() {
-            Object message;
             try {
+                Object message;
                 while ((message = reader.readObject()) != null) {
-                    CommandLine command = CommandLine.valueOf((String) message);
+                    CommandLine command = (CommandLine) message;
                     switch (command) {
                         case GAME_START -> startGame();
                         case GET_SHOT_RESULT -> setShotResult(controller.getShotResult((Cell) reader.readObject()));
@@ -115,13 +113,16 @@ public class PlayerSocket {
 
     }
 
-    private void startGame() throws IOException {
+    private void startGame() throws IOException, ClassNotFoundException {
         BattleshipFrame.getInstance().setMainPanel(new BattleshipGamePanel(this));
         controller.displayMessage("Game started!\n");
-        showTurn(reader.readBoolean());
+        boolean isPlayerTurn = false;
+        isPlayerTurn = (boolean) reader.readObject();
+        showTurn(isPlayerTurn);
     }
 
     private void showTurn(boolean isPlayerTurn) {
+        System.out.println(isPlayerTurn);
         if (isPlayerTurn) {
             controller.displayMessage("It is your turn");
             controller.setTurn(true);

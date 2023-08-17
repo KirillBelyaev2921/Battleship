@@ -37,8 +37,8 @@ public class HostPlayerSocket {
         int i = 0;
         try {
             for (ObjectOutputStream writer : writers) {
-                writer.writeChars(GAME_START.name());
-                writer.writeBoolean(i == firstTurn);
+                writer.writeObject(GAME_START);
+                writer.writeObject(i == firstTurn);
                 i++;
             }
         } catch (IOException e) {
@@ -50,7 +50,7 @@ public class HostPlayerSocket {
         try {
             int writerIndexToShot = addresses.indexOf(address) == 0 ? 1 : 0;
             ObjectOutputStream writer = writers.get(writerIndexToShot);
-            writer.writeChars(GET_SHOT_RESULT.name());
+            writer.writeObject(GET_SHOT_RESULT);
             writer.writeObject(cell);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -61,7 +61,7 @@ public class HostPlayerSocket {
         try {
             int writerIndexToShot = addresses.indexOf(address) == 0 ? 1 : 0;
             ObjectOutputStream writer = writers.get(writerIndexToShot);
-            writer.writeChars(SHOT_RESULT.name());
+            writer.writeObject(SHOT_RESULT);
             writer.writeObject(shotResult);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -90,11 +90,11 @@ public class HostPlayerSocket {
 
         public ClientHandler(SocketChannel clientSocket) {
             try {
-                ObjectOutputStream writer = new ObjectOutputStream(Channels.newOutputStream(clientSocket));
+                ObjectOutputStream writer = new ObjectOutputStream(clientSocket.socket().getOutputStream());
                 address = clientSocket.getRemoteAddress().toString();
                 addresses.add(address);
                 writers.add(writer);
-                reader = new ObjectInputStream(Channels.newInputStream(clientSocket));
+                reader = new ObjectInputStream(clientSocket.socket().getInputStream());
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -102,11 +102,10 @@ public class HostPlayerSocket {
 
         @Override
         public void run() {
-            Object message;
             try {
+                Object message;
                 while ((message = reader.readObject()) != null) {
-                    System.out.println(message);
-                    CommandLine command = CommandLine.valueOf((String) message);
+                    CommandLine command = (CommandLine) message;
                     switch (command) {
                         case READY -> {
                             playersReadyCounter++;
