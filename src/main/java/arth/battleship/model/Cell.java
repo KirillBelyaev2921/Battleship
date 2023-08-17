@@ -1,6 +1,7 @@
 package arth.battleship.model;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Cell implements Serializable {
     private final int i;
@@ -27,4 +28,16 @@ public class Cell implements Serializable {
         return j;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Cell cell = (Cell) o;
+        return i == cell.i && j == cell.j;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(i, j);
+    }
 }

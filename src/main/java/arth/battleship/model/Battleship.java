@@ -97,6 +97,11 @@ public class Battleship implements Serializable {
         return shipCells.size();
     }
 
+    public boolean shotCell(Cell cell) {
+        boolean result = shipCells.remove(cell);
+        return result;
+    }
+
     private enum Direction {
         HORIZONTAL_DIRECTION, VERTICAL_DIRECTION, INCORRECT_DIRECTION
     }

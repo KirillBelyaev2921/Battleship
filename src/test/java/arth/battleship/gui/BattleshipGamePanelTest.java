@@ -3,8 +3,8 @@ package arth.battleship.gui;
 import arth.battleship.model.Battleship;
 import arth.battleship.model.Lobby;
 import arth.battleship.model.Player;
-import arth.battleship.socket.HostPlayerConnection;
-import arth.battleship.socket.PlayerConnection;
+import arth.battleship.socket.HostPlayerSocket;
+import arth.battleship.socket.PlayerSocket;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
@@ -42,9 +42,9 @@ class BattleshipGamePanelTest {
         Player player2 = new Player("Aska2", battleships2);
 
 
-        HostPlayerConnection hostPlayerConnection = new HostPlayerConnection(lobby);
-        PlayerConnection connection = new PlayerConnection(player1);
-        PlayerConnection connection2 = new PlayerConnection(player2);
+        HostPlayerSocket hostPlayerConnection = new HostPlayerSocket(lobby);
+        PlayerSocket connection = new PlayerSocket(player1);
+        PlayerSocket connection2 = new PlayerSocket(player2);
 
 
 

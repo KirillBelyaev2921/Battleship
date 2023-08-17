@@ -1,6 +1,7 @@
 package arth.battleship.socket;
 
 import arth.battleship.model.Battleship;
+import arth.battleship.model.Cell;
 import arth.battleship.model.Lobby;
 import arth.battleship.model.Player;
 import arth.battleship.constants.CommandLines;
@@ -17,7 +18,7 @@ import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class HostPlayerConnection {
+public class HostPlayerSocket {
     private final ExecutorService executorService;
 
     private Lobby lobby;
@@ -27,7 +28,7 @@ public class HostPlayerConnection {
     private int playersReadyCounter;
 
 
-    public HostPlayerConnection(Lobby lobby) {
+    public HostPlayerSocket(Lobby lobby) {
         this.lobby = lobby;
         executorService = Executors.newCachedThreadPool();
         executorService.submit(new ServerHandler());
@@ -48,13 +49,12 @@ public class HostPlayerConnection {
         }
     }
 
-    private void shoot(String command, String name, String cell, String result) {
+    private void shoot(String command, String name, String cell) {
         for (PrintWriter printWriter : clientWriters) {
             printWriter.println(CommandLines.SHOT_RESULT);
             printWriter.println(command);
             printWriter.println(name);
             printWriter.println(cell);
-            printWriter.println(result);
             printWriter.flush();
         }
     }
@@ -111,11 +111,7 @@ public class HostPlayerConnection {
                         case CommandLines.SHOOT -> {
                             String cell = (String) reader.readObject();
                             Player secondPlayer = lobby.getSecondPlayer(address);
-                            String shoot = lobby.getPlayer(address).getPlayerName() +
-                                    " shoot " + cell + ". Result: ";
-
-                            shoot(hitShip(secondPlayer, cell), lobby.getPlayer(address).getPlayerName(), cell, shoot);
-
+                            shoot(secondPlayer.shotCell(new Cell(cell)), lobby.getPlayer(address).getPlayerName(), cell);
                         }
                         case CommandLines.SET_PLAYERS -> setPlayer();
                     }
@@ -126,23 +122,6 @@ public class HostPlayerConnection {
                 System.out.println("Wrong client version!");
                 throw new RuntimeException(e);
             }
-        }
-
-        private String hitShip(Player secondPlayer, String cell) {
-            String result = "Miss";
-            for (Battleship battleship : secondPlayer.getBattleships()) {
-                if (battleship.getShipCells().removeIf(cell1 -> cell1.getStringCell().equals(cell)))
-                    result = "Hit";
-                if (battleship.getShipCells().size() == 0) {
-                    secondPlayer.removeBattleship(battleship);
-                    result = "Kill";
-                    break;
-                }
-            }
-            if (secondPlayer.getBattleships().size() == 0)
-                result = "Win";
-
-            return result;
         }
 
         private void setPlayer() {

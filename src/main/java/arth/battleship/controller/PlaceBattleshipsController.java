@@ -4,7 +4,7 @@ import arth.battleship.constants.CommandLines;
 import arth.battleship.exception.DiagonalCellPlacedException;
 import arth.battleship.exception.InvalidBattleshipSizeException;
 import arth.battleship.exception.InvalidNumberOfShipsOfOneSizeException;
-import arth.battleship.socket.PlayerConnection;
+import arth.battleship.socket.PlayerSocket;
 import arth.battleship.model.Battleship;
 import arth.battleship.model.Player;
 
@@ -13,22 +13,22 @@ import java.util.List;
 
 public class PlaceBattleshipsController extends BattleshipController {
     private Player player;
-    private PlayerConnection playerConnection;
+    private PlayerSocket playerSocket;
     private BattleshipsBuilder builder;
     private List<Battleship> battleships;
 
     public PlaceBattleshipsController() {
         player = new Player();
-        playerConnection = new PlayerConnection(player);
+        playerSocket = new PlayerSocket(player);
         this.builder = new BattleshipsBuilder();
     }
 
     public String ready(boolean selected, String name) {
         if (selected) {
-            playerConnection.setPlayer(new Player(name, battleships));
-            playerConnection.setPlayerName(CommandLines.READY, name);
+            playerSocket.setPlayer(new Player(name, battleships));
+            playerSocket.setPlayerName(CommandLines.READY, name);
         } else {
-            playerConnection.setPlayerName(CommandLines.NOT_READY, name);
+            playerSocket.setPlayerName(CommandLines.NOT_READY, name);
         }
 
         return selected ? CommandLines.READY : CommandLines.NOT_READY;

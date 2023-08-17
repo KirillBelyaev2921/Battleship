@@ -1,15 +1,15 @@
 package arth.battleship.controller;
 
 import arth.battleship.model.Cell;
-import arth.battleship.socket.PlayerConnection;
+import arth.battleship.socket.PlayerSocket;
 import arth.battleship.gui.BattleshipGamePanel;
 
 public class GameController extends BattleshipController {
 
-    private final PlayerConnection connection;
+    private final PlayerSocket connection;
     private final BattleshipGamePanel panel;
 
-    public GameController(PlayerConnection connection, BattleshipGamePanel panel) {
+    public GameController(PlayerSocket connection, BattleshipGamePanel panel) {
         this.panel = panel;
         this.connection = connection;
         connection.setController(this);
@@ -27,7 +27,9 @@ public class GameController extends BattleshipController {
         panel.setTurn(isPlayersTurn);
     }
 
-    public void shotResult(String command, String name, String cell, String result) {
+    public void shotResult(String command, String name, String cell) {
+        String result = name +
+                " shoot " + cell + ". Result: ";
         panel.displayResult(result + command);
         if (connection.getPlayer().getPlayerName().equals(name)) {
             if (command.equals("Miss")) {

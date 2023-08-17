@@ -16,14 +16,14 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class PlayerConnection {
+public class PlayerSocket {
 
     private Player player;
     private GameController controller;
     private BufferedReader reader;
     private ObjectOutputStream writer;
 
-    public PlayerConnection(Player player) {
+    public PlayerSocket(Player player) {
         this.player = player;
         setUpNetworking();
         ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -93,7 +93,7 @@ public class PlayerConnection {
                     switch (message) {
                         case CommandLines.GAME_START -> startGame();
                         case CommandLines.SHOT_RESULT ->
-                                controller.shotResult(reader.readLine(), reader.readLine(), reader.readLine(), reader.readLine());
+                                controller.shotResult(reader.readLine(), reader.readLine(), reader.readLine());
                     }
                 }
             } catch (IOException ex) {

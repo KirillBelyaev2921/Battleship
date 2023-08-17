@@ -3,6 +3,7 @@ package arth.battleship.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class Player implements Serializable {
     private String playerName;
@@ -24,6 +25,24 @@ public class Player implements Serializable {
 
     public List<Battleship> getBattleships() {
         return battleships;
+    }
+
+    public String shotCell(Cell cell) {
+        Optional<Battleship> oBattleship = battleships.stream()
+                .filter(battleship -> battleship.shotCell(cell))
+                .findAny();
+        if (oBattleship.isEmpty()) {
+            return "Miss";
+        }
+        Battleship battleship = oBattleship.get();
+        if (battleship.getSize() != 0) {
+            return "Hit";
+        }
+        battleships.remove(battleship);
+        if (battleships.size() != 0) {
+            return "Kill";
+        }
+        return "Win";
     }
 
     public void removeBattleship(Battleship battleship) {

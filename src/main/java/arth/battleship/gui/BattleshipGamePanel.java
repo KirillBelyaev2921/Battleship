@@ -3,7 +3,7 @@ package arth.battleship.gui;
 import arth.battleship.gui.BoardPanel.EnemyBoardPanel;
 import arth.battleship.gui.BoardPanel.PlayerBoardPanel;
 import arth.battleship.model.Cell;
-import arth.battleship.socket.PlayerConnection;
+import arth.battleship.socket.PlayerSocket;
 import arth.battleship.controller.GameController;
 
 import javax.swing.*;
@@ -16,7 +16,7 @@ public class BattleshipGamePanel extends JPanel {
     private EnemyBoardPanel enemyBoardPanel;
     private JButton shootButton;
 
-    public BattleshipGamePanel(PlayerConnection connection) {
+    public BattleshipGamePanel(PlayerSocket connection) {
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.setBorder(BorderFactory.createEmptyBorder(100, 100, 100, 100));
         controller = new GameController(connection, this);
