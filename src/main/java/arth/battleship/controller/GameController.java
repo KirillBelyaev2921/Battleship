@@ -16,7 +16,7 @@ public class GameController extends BattleshipController {
     }
 
     public void shootShip(Cell cellToShoot) {
-        connection.shootShip(cellToShoot.getStringCell());
+        connection.shootShip(cellToShoot.toString());
     }
 
     public void displayMessage(String readLine) {

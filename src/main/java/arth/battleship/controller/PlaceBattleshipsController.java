@@ -1,6 +1,6 @@
 package arth.battleship.controller;
 
-import arth.battleship.constants.CommandLines;
+import arth.battleship.constants.CommandLine;
 import arth.battleship.exception.DiagonalCellPlacedException;
 import arth.battleship.exception.InvalidBattleshipSizeException;
 import arth.battleship.exception.InvalidNumberOfShipsOfOneSizeException;
@@ -26,12 +26,12 @@ public class PlaceBattleshipsController extends BattleshipController {
     public String ready(boolean selected, String name) {
         if (selected) {
             playerSocket.setPlayer(new Player(name, battleships));
-            playerSocket.setPlayerName(CommandLines.READY, name);
+            playerSocket.setPlayerName(CommandLine.READY, name);
         } else {
-            playerSocket.setPlayerName(CommandLines.NOT_READY, name);
+            playerSocket.setPlayerName(CommandLine.NOT_READY, name);
         }
 
-        return selected ? CommandLines.READY : CommandLines.NOT_READY;
+        return selected ? CommandLine.READY.toString() : CommandLine.NOT_READY.toString();
     }
 
 
@@ -51,8 +51,8 @@ public class PlaceBattleshipsController extends BattleshipController {
         }
         if (builder.countShips()) {
             battleships = builder.build();
-            return CommandLines.READY;
+            return CommandLine.READY.toString();
         }
-        return CommandLines.NOT_READY;
+        return CommandLine.NOT_READY.toString();
     }
 }

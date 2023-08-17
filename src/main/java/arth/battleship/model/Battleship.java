@@ -23,7 +23,7 @@ public class Battleship implements Serializable {
     }
 
     public Battleship(List<Cell> cells) {
-        this(cells.stream().map(Cell::getStringCell).toArray(String[]::new));
+        this(cells.stream().map(Cell::toString).toArray(String[]::new));
     }
 
     private boolean isCorrectPlacement(String[] shipCells) {

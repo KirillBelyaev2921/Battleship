@@ -4,7 +4,7 @@ import arth.battleship.model.Battleship;
 import arth.battleship.model.Cell;
 import arth.battleship.model.Lobby;
 import arth.battleship.model.Player;
-import arth.battleship.constants.CommandLines;
+import arth.battleship.constants.CommandLine;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -51,7 +51,7 @@ public class HostPlayerSocket {
 
     private void shoot(String command, String name, String cell) {
         for (PrintWriter printWriter : clientWriters) {
-            printWriter.println(CommandLines.SHOT_RESULT);
+            printWriter.println(CommandLine.SHOT_RESULT.name());
             printWriter.println(command);
             printWriter.println(name);
             printWriter.println(cell);
@@ -96,24 +96,24 @@ public class HostPlayerSocket {
             Object message;
             try {
                 while ((message = reader.readObject()) != null) {
-                    String command = (String) message;
+                    CommandLine command = (CommandLine) message;
                     switch (command) {
-                        case CommandLines.READY -> {
+                        case READY -> {
                             playersReadyCounter++;
                             lobby.addPlayer(address, new Player((String) reader.readObject(), null));
                             checkPlayersIsReady();
                         }
-                        case CommandLines.NOT_READY -> {
+                        case NOT_READY -> {
                             playersReadyCounter--;
                             lobby.removePlayer(address);
                             checkPlayersIsReady();
                         }
-                        case CommandLines.SHOOT -> {
+                        case SHOOT -> {
                             String cell = (String) reader.readObject();
                             Player secondPlayer = lobby.getSecondPlayer(address);
                             shoot(secondPlayer.shotCell(new Cell(cell)), lobby.getPlayer(address).getPlayerName(), cell);
                         }
-                        case CommandLines.SET_PLAYERS -> setPlayer();
+                        case SET_PLAYERS -> setPlayer();
                     }
                 }
             } catch (IOException e) {
@@ -125,7 +125,7 @@ public class HostPlayerSocket {
         }
 
         private void setPlayer() {
-            tellEveryone(CommandLines.SET_PLAYERS);
+            tellEveryone(CommandLine.SET_PLAYERS.toString());
             String name = null;
             List<Battleship> battleships = null;
             try {
@@ -143,7 +143,7 @@ public class HostPlayerSocket {
 
         private void checkPlayersIsReady() {
             if (playersReadyCounter == 2) {
-                startGame(CommandLines.GAME_START, lobby.getPlayer(addresses.get(new Random().nextInt(2))).getPlayerName());
+                startGame(CommandLine.GAME_START.toString(), lobby.getPlayer(addresses.get(new Random().nextInt(2))).getPlayerName());
             }
         }
 

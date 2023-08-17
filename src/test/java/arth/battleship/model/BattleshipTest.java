@@ -14,44 +14,44 @@ class BattleshipTest {
     @Test
     void getCorrectOneCellShipTest() {
         Battleship battleship = new Battleship("A10");
-        assertIterableEquals(battleship.getShipCells().stream().map(Cell::getStringCell).collect(Collectors.toList()), List.of("A10"));
+        assertIterableEquals(battleship.getShipCells().stream().map(Cell::toString).collect(Collectors.toList()), List.of("A10"));
     }
 
     @Test
     void getCorrectHorizontalTwoCellShipTest() {
         Battleship battleship = new Battleship("A1", "A2");
-        assertIterableEquals(battleship.getShipCells().stream().map(Cell::getStringCell).collect(Collectors.toList()), List.of("A1", "A2"));
+        assertIterableEquals(battleship.getShipCells().stream().map(Cell::toString).collect(Collectors.toList()), List.of("A1", "A2"));
 
     }
 
     @Test
     void getCorrectHorizontalThreeCellShipTest() {
         Battleship battleship = new Battleship("A1", "A2", "A3");
-        assertIterableEquals(battleship.getShipCells().stream().map(Cell::getStringCell).collect(Collectors.toList()), List.of("A1", "A2", "A3"));
+        assertIterableEquals(battleship.getShipCells().stream().map(Cell::toString).collect(Collectors.toList()), List.of("A1", "A2", "A3"));
     }
 
     @Test
     void getCorrectHorizontalFourCellShipTest() {
         Battleship battleship = new Battleship("A1", "A2", "A3", "A4");
-        assertIterableEquals(battleship.getShipCells().stream().map(Cell::getStringCell).collect(Collectors.toList()), List.of("A1", "A2", "A3", "A4"));
+        assertIterableEquals(battleship.getShipCells().stream().map(Cell::toString).collect(Collectors.toList()), List.of("A1", "A2", "A3", "A4"));
     }
     @Test
     void getCorrectVerticalTwoCellShipTest() {
         Battleship battleship = new Battleship("A1", "B1");
-        assertIterableEquals(battleship.getShipCells().stream().map(Cell::getStringCell).collect(Collectors.toList()), List.of("A1", "B1"));
+        assertIterableEquals(battleship.getShipCells().stream().map(Cell::toString).collect(Collectors.toList()), List.of("A1", "B1"));
 
     }
 
     @Test
     void getCorrectVerticalThreeCellShipTest() {
         Battleship battleship = new Battleship("A1", "B1", "C1");
-        assertIterableEquals(battleship.getShipCells().stream().map(Cell::getStringCell).collect(Collectors.toList()), List.of("A1", "B1", "C1"));
+        assertIterableEquals(battleship.getShipCells().stream().map(Cell::toString).collect(Collectors.toList()), List.of("A1", "B1", "C1"));
     }
 
     @Test
     void getCorrectVerticalFourCellShipTest() {
         Battleship battleship = new Battleship("A1", "B1", "C1", "D1");
-        assertIterableEquals(battleship.getShipCells().stream().map(Cell::getStringCell).collect(Collectors.toList()), List.of("A1", "B1", "C1", "D1"));
+        assertIterableEquals(battleship.getShipCells().stream().map(Cell::toString).collect(Collectors.toList()), List.of("A1", "B1", "C1", "D1"));
     }
 
     @Test

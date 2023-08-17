@@ -17,7 +17,7 @@ class CellTest {
     public void createCellWithNumbersAndGetStringCoordinates() {
         Cell cell = new Cell(1, 2);
 
-        assertEquals(cell.getStringCell(), "B3");
+        assertEquals(cell.toString(), "B3");
     }
 
     @Test
@@ -32,7 +32,7 @@ class CellTest {
     public void createCellWithStringAndGetStringCoordinates() {
         Cell cell = new Cell("B3");
 
-        assertEquals(cell.getStringCell(), "B3");
+        assertEquals(cell.toString(), "B3");
     }
 
 }

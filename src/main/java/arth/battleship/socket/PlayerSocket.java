@@ -1,6 +1,6 @@
 package arth.battleship.socket;
 
-import arth.battleship.constants.CommandLines;
+import arth.battleship.constants.CommandLine;
 import arth.battleship.controller.GameController;
 import arth.battleship.gui.BattleshipFrame;
 import arth.battleship.gui.BattleshipGamePanel;
@@ -53,7 +53,7 @@ public class PlayerSocket {
         }
     }
 
-    public void setPlayerName(String s, String name) {
+    public void setPlayerName(CommandLine s, String name) {
         try {
             writer.writeObject(s);
             writer.writeObject(name);
@@ -64,7 +64,7 @@ public class PlayerSocket {
 
     public void setReady(String name, List<Battleship> battleships) {
         try {
-            writer.writeObject(CommandLines.SET_PLAYERS);
+            writer.writeObject(CommandLine.SET_PLAYERS);
             writer.writeObject(name);
             writer.writeObject(battleships);
         } catch (IOException e) {
@@ -74,7 +74,7 @@ public class PlayerSocket {
 
     public void shootShip(String text) {
         try {
-            writer.writeObject(CommandLines.SHOOT);
+            writer.writeObject(CommandLine.SHOOT);
             writer.writeObject(text);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -90,9 +90,10 @@ public class PlayerSocket {
             String message;
             try {
                 while ((message = reader.readLine()) != null) {
-                    switch (message) {
-                        case CommandLines.GAME_START -> startGame();
-                        case CommandLines.SHOT_RESULT ->
+                    CommandLine command = CommandLine.valueOf((String) message);
+                    switch (command) {
+                        case GAME_START -> startGame();
+                        case SHOT_RESULT ->
                                 controller.shotResult(reader.readLine(), reader.readLine(), reader.readLine());
                     }
                 }

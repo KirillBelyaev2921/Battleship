@@ -29,7 +29,7 @@ public abstract class BoardPanel extends JPanel {
 
         for (int i = 0; i < 10; i++) {
             List<BattleshipCellPanel> cellsRow = new ArrayList<>();
-            this.add(new LabelCellPanel(new Cell(i, 0).getStringCell().substring(0, 1)));
+            this.add(new LabelCellPanel(new Cell(i, 0).toString().substring(0, 1)));
             for (int j = 0; j < 10; j++) {
                 BattleshipCellPanel cell = factory.createBattleshipCellPanel(type, new Cell(i, j));
                 cellsRow.add(cell);

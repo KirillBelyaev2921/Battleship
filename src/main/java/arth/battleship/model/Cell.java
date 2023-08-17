@@ -16,10 +16,6 @@ public class Cell implements Serializable {
         this((int) cell.toUpperCase().charAt(0) - 'A', Integer.parseInt(cell.substring(1)) - 1);
     }
 
-    public String getStringCell() {
-        return Character.toString((char) i + 'A') + (j + 1);
-    }
-
     public int getI() {
         return i;
     }
@@ -39,5 +35,10 @@ public class Cell implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(i, j);
+    }
+
+    @Override
+    public String toString() {
+        return Character.toString((char) i + 'A') + (j + 1);
     }
 }
