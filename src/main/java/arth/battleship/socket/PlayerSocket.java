@@ -10,7 +10,6 @@ import arth.battleship.model.Player;
 
 import java.io.*;
 import java.net.InetSocketAddress;
-import java.nio.channels.Channels;
 import java.nio.channels.SocketChannel;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -116,13 +115,10 @@ public class PlayerSocket {
     private void startGame() throws IOException, ClassNotFoundException {
         BattleshipFrame.getInstance().setMainPanel(new BattleshipGamePanel(this));
         controller.displayMessage("Game started!\n");
-        boolean isPlayerTurn = false;
-        isPlayerTurn = (boolean) reader.readObject();
-        showTurn(isPlayerTurn);
+        showTurn((boolean) reader.readObject());
     }
 
     private void showTurn(boolean isPlayerTurn) {
-        System.out.println(isPlayerTurn);
         if (isPlayerTurn) {
             controller.displayMessage("It is your turn");
             controller.setTurn(true);

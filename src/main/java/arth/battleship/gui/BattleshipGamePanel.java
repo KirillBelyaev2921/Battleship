@@ -36,7 +36,7 @@ public class BattleshipGamePanel extends JPanel {
         playerBoardPanel = new PlayerBoardPanel();
         playerBoardPanel.placeBattleships(connection.getPlayer().getBattleships());
         boards.add(playerBoardPanel);
-        enemyBoardPanel = new EnemyBoardPanel(controller);
+        enemyBoardPanel = new EnemyBoardPanel();
         boards.add(enemyBoardPanel);
 
         shootButton = new JButton("Shoot");
@@ -67,7 +67,7 @@ public class BattleshipGamePanel extends JPanel {
         repaint();
     }
 
-    public void setMyCell(String result, Cell cell) {
+    public void setMyCell(ShotResult result, Cell cell) {
         playerBoardPanel.setCell(result, cell);
         repaint();
     }

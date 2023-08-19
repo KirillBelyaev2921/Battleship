@@ -2,14 +2,12 @@ package arth.battleship.socket;
 
 import arth.battleship.constants.ShotResult;
 import arth.battleship.model.Cell;
-import arth.battleship.model.Lobby;
 import arth.battleship.constants.CommandLine;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetSocketAddress;
-import java.nio.channels.Channels;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.*;
@@ -20,14 +18,12 @@ import static arth.battleship.constants.CommandLine.*;
 
 public class HostPlayerSocket {
     private final ExecutorService executorService;
-    private Lobby lobby;
     private List<String> addresses = new ArrayList<>();
     private List<ObjectOutputStream> writers = new ArrayList<>();
     private int playersReadyCounter;
 
 
-    public HostPlayerSocket(Lobby lobby) {
-        this.lobby = lobby;
+    public HostPlayerSocket() {
         executorService = Executors.newCachedThreadPool();
         executorService.submit(new ServerHandler());
     }

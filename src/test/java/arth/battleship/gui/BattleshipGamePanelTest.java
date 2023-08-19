@@ -42,7 +42,7 @@ class BattleshipGamePanelTest {
         Player player2 = new Player("Aska2", battleships2);
 
 
-        HostPlayerSocket hostPlayerConnection = new HostPlayerSocket(lobby);
+        HostPlayerSocket hostPlayerConnection = new HostPlayerSocket();
         PlayerSocket connection = new PlayerSocket(player1);
         PlayerSocket connection2 = new PlayerSocket(player2);
 

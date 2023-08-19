@@ -10,15 +10,11 @@ import arth.battleship.model.Cell;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import static arth.battleship.constants.ShotResult.*;
+
 public class EnemyBoardPanel extends BoardPanel {
-    private GameController controller;
     private Cell cellToShoot;
     private boolean isTurn;
-
-    public EnemyBoardPanel(GameController controller) {
-        this();
-        this.controller = controller;
-    }
 
     public EnemyBoardPanel() {
         super(BattleshipCellPanelType.ENEMY_BATTLESHIP_CELL_PANEL_TYPE);
@@ -34,10 +30,12 @@ public class EnemyBoardPanel extends BoardPanel {
     }
 
     public void setCell(ShotResult result) {
-        if (result == ShotResult.MISS)
+        if (result == MISS)
             getBattleshipCellPanelByCell(cellToShoot).setStatus(BattleshipCellPanel.CellStatus.MISS);
         else
             getBattleshipCellPanelByCell(cellToShoot).setStatus(BattleshipCellPanel.CellStatus.HIT);
+        if (result == KILL || result == WIN)
+            sinkBattleship(cellToShoot.getI(), cellToShoot.getJ());
         cellToShoot = null;
     }
 
@@ -51,7 +49,7 @@ public class EnemyBoardPanel extends BoardPanel {
         public void mousePressed(MouseEvent e) {
             if (isTurn) {
                 EnemyBattleshipCellPanel cellPanel = (EnemyBattleshipCellPanel) e.getComponent();
-                if (!cellPanel.notEmpty()) {
+                if (!cellPanel.notEmpty() && cellPanel.getStatus() == BattleshipCellPanel.CellStatus.EMPTY) {
 
                     if (cellToShoot != null) {
                         BattleshipCellPanel cellPanel1 = getBattleshipCellPanelByCell(cellToShoot);

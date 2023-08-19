@@ -52,7 +52,7 @@ public class GameController extends BattleshipController {
             displayMessage("You Lose");
             setTurn(false);
         }
-        panel.setMyCell(shotCell.toString(), cell);
+        panel.setMyCell(shotCell, cell);
         return shotCell;
     }
 }
