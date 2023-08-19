@@ -154,7 +154,8 @@ public class BattleshipsBuilder {
 //                battleshipsSizesCount.get(2) == 3 &&
 //                battleshipsSizesCount.get(3) == 2 &&
 //                battleshipsSizesCount.get(4) == 1;
-        return battleshipsSizesCount.get(1) == 1;
+        return battleshipsSizesCount.get(1) == 2 &&
+                battleshipsSizesCount.get(2) == 1;
     }
 
     public List<Battleship> build() {

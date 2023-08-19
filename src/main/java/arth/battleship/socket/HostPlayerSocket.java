@@ -1,65 +1,70 @@
 package arth.battleship.socket;
 
-import arth.battleship.model.Battleship;
+import arth.battleship.constants.ShotResult;
 import arth.battleship.model.Cell;
-import arth.battleship.model.Lobby;
-import arth.battleship.model.Player;
 import arth.battleship.constants.CommandLine;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.PrintWriter;
+import java.io.ObjectOutputStream;
 import java.net.InetSocketAddress;
-import java.nio.channels.Channels;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import static arth.battleship.constants.CommandLine.*;
+
 public class HostPlayerSocket {
     private final ExecutorService executorService;
-
-    private Lobby lobby;
-
-    private List<PrintWriter> clientWriters = new ArrayList<>();
     private List<String> addresses = new ArrayList<>();
+    private List<ObjectOutputStream> writers = new ArrayList<>();
     private int playersReadyCounter;
 
 
-    public HostPlayerSocket(Lobby lobby) {
-        this.lobby = lobby;
+    public HostPlayerSocket() {
         executorService = Executors.newCachedThreadPool();
         executorService.submit(new ServerHandler());
     }
 
-    private void tellEveryone(String message) {
-        for (PrintWriter writer : clientWriters) {
-            writer.println(message);
-            writer.flush();
+    private void startGame() {
+        int firstTurn = new Random().nextInt(2);
+        int i = 0;
+        try {
+            for (ObjectOutputStream writer : writers) {
+                writer.writeObject(GAME_START);
+                writer.writeObject(i == firstTurn);
+                i++;
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    private void startGame(String message, String address) {
-        for (PrintWriter writer : clientWriters) {
-            writer.println(message);
-            writer.println(address);
-            writer.flush();
+    private void shoot(String address, Cell cell) {
+        try {
+            int writerIndexToShot = addresses.indexOf(address) == 0 ? 1 : 0;
+            ObjectOutputStream writer = writers.get(writerIndexToShot);
+            writer.writeObject(GET_SHOT_RESULT);
+            writer.writeObject(cell);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    private void shoot(String command, String name, String cell) {
-        for (PrintWriter printWriter : clientWriters) {
-            printWriter.println(CommandLine.SHOT_RESULT.name());
-            printWriter.println(command);
-            printWriter.println(name);
-            printWriter.println(cell);
-            printWriter.flush();
+    private void showShotResult(String address, ShotResult shotResult) {
+        try {
+            int writerIndexToShot = addresses.indexOf(address) == 0 ? 1 : 0;
+            ObjectOutputStream writer = writers.get(writerIndexToShot);
+            writer.writeObject(SHOT_RESULT);
+            writer.writeObject(shotResult);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
-
     class ServerHandler implements Runnable {
+
         @Override
         public void run() {
             try (ServerSocketChannel serverSocketChannel = ServerSocketChannel.open()) {
@@ -67,8 +72,6 @@ public class HostPlayerSocket {
 
                 while (serverSocketChannel.isOpen()) {
                     SocketChannel clientChannel = serverSocketChannel.accept();
-                    PrintWriter writer = new PrintWriter(Channels.newWriter(clientChannel, StandardCharsets.UTF_8));
-                    clientWriters.add(writer);
                     executorService.submit(new ClientHandler(clientChannel));
                 }
             } catch (IOException e) {
@@ -76,16 +79,18 @@ public class HostPlayerSocket {
             }
         }
     }
-
     class ClientHandler implements Runnable {
         private final ObjectInputStream reader;
+
         private String address;
 
         public ClientHandler(SocketChannel clientSocket) {
             try {
+                ObjectOutputStream writer = new ObjectOutputStream(clientSocket.socket().getOutputStream());
                 address = clientSocket.getRemoteAddress().toString();
                 addresses.add(address);
-                reader = new ObjectInputStream(Channels.newInputStream(clientSocket));
+                writers.add(writer);
+                reader = new ObjectInputStream(clientSocket.socket().getInputStream());
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -93,27 +98,21 @@ public class HostPlayerSocket {
 
         @Override
         public void run() {
-            Object message;
             try {
+                Object message;
                 while ((message = reader.readObject()) != null) {
                     CommandLine command = (CommandLine) message;
                     switch (command) {
                         case READY -> {
                             playersReadyCounter++;
-                            lobby.addPlayer(address, new Player((String) reader.readObject(), null));
                             checkPlayersIsReady();
                         }
-                        case NOT_READY -> {
-                            playersReadyCounter--;
-                            lobby.removePlayer(address);
-                            checkPlayersIsReady();
+                        case NOT_READY -> playersReadyCounter--;
+                        case SHOT -> {
+                            Cell cell = (Cell) reader.readObject();
+                            shoot(address, cell);
                         }
-                        case SHOOT -> {
-                            String cell = (String) reader.readObject();
-                            Player secondPlayer = lobby.getSecondPlayer(address);
-                            shoot(secondPlayer.shotCell(new Cell(cell)), lobby.getPlayer(address).getPlayerName(), cell);
-                        }
-                        case SET_PLAYERS -> setPlayer();
+                        case SET_SHOT_RESULT -> showShotResult(address, (ShotResult) reader.readObject());
                     }
                 }
             } catch (IOException e) {
@@ -123,27 +122,9 @@ public class HostPlayerSocket {
                 throw new RuntimeException(e);
             }
         }
-
-        private void setPlayer() {
-            tellEveryone(CommandLine.SET_PLAYERS.toString());
-            String name = null;
-            List<Battleship> battleships = null;
-            try {
-                name = (String) reader.readObject();
-                battleships = (List<Battleship>) reader.readObject();
-
-
-            } catch (IOException | ClassNotFoundException e) {
-                throw new RuntimeException(e);
-            }
-
-            Player player = new Player(name, battleships);
-            lobby.addPlayer(address, player);
-        }
-
         private void checkPlayersIsReady() {
             if (playersReadyCounter == 2) {
-                startGame(CommandLine.GAME_START.toString(), lobby.getPlayer(addresses.get(new Random().nextInt(2))).getPlayerName());
+                startGame();
             }
         }
 

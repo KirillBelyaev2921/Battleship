@@ -10,6 +10,9 @@ import javax.swing.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import static arth.battleship.constants.CommandLine.NOT_READY;
+import static arth.battleship.constants.CommandLine.READY;
+
 public class PlaceBattleshipsBoardPanel extends BoardPanel {
     private PlaceBattleshipsController controller;
     private JCheckBox isReadyCheckBox;
@@ -44,8 +47,8 @@ public class PlaceBattleshipsBoardPanel extends BoardPanel {
                     cellPanel.setStatus(BattleshipCellPanel.CellStatus.HIT);
 
                 String response = controller.updatePlayerBattleships(cellPanel.notEmpty(), cellPanel.getCell().getI(), cellPanel.getCell().getJ());
-                isReadyCheckBox.setText(response.equals(CommandLine.READY.toString()) ? CommandLine.NOT_READY.toString() : response);
-                isReadyCheckBox.setEnabled(response.equals(CommandLine.READY.toString()));
+                isReadyCheckBox.setText(response.equals(READY.toString()) ? NOT_READY.toString() : response);
+                isReadyCheckBox.setEnabled(response.equals(READY.toString()));
                 repaint();
             }
         }

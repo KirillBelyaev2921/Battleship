@@ -1,5 +1,7 @@
 package arth.battleship.model;
 
+import arth.battleship.constants.ShotResult;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,22 +29,22 @@ public class Player implements Serializable {
         return battleships;
     }
 
-    public String shotCell(Cell cell) {
+    public ShotResult shotCell(Cell cell) {
         Optional<Battleship> oBattleship = battleships.stream()
                 .filter(battleship -> battleship.shotCell(cell))
                 .findAny();
         if (oBattleship.isEmpty()) {
-            return "Miss";
+            return ShotResult.MISS;
         }
         Battleship battleship = oBattleship.get();
         if (battleship.getSize() != 0) {
-            return "Hit";
+            return ShotResult.HIT;
         }
         battleships.remove(battleship);
         if (battleships.size() != 0) {
-            return "Kill";
+            return ShotResult.KILL;
         }
-        return "Win";
+        return ShotResult.WIN;
     }
 
     public void removeBattleship(Battleship battleship) {

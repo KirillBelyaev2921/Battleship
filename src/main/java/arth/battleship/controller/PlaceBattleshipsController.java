@@ -10,6 +10,9 @@ import arth.battleship.model.Player;
 
 import java.util.List;
 
+import static arth.battleship.constants.CommandLine.NOT_READY;
+import static arth.battleship.constants.CommandLine.READY;
+
 
 public class PlaceBattleshipsController extends BattleshipController {
     private Player player;
@@ -26,12 +29,12 @@ public class PlaceBattleshipsController extends BattleshipController {
     public String ready(boolean selected, String name) {
         if (selected) {
             playerSocket.setPlayer(new Player(name, battleships));
-            playerSocket.setPlayerName(CommandLine.READY, name);
+            playerSocket.setReady();
         } else {
-            playerSocket.setPlayerName(CommandLine.NOT_READY, name);
+            playerSocket.setNotReady();
         }
 
-        return selected ? CommandLine.READY.toString() : CommandLine.NOT_READY.toString();
+        return selected ? READY.toString() : NOT_READY.toString();
     }
 
 
@@ -51,8 +54,8 @@ public class PlaceBattleshipsController extends BattleshipController {
         }
         if (builder.countShips()) {
             battleships = builder.build();
-            return CommandLine.READY.toString();
+            return READY.toString();
         }
-        return CommandLine.NOT_READY.toString();
+        return NOT_READY.toString();
     }
 }

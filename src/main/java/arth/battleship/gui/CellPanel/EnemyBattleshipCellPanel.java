@@ -7,6 +7,9 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 
+import static arth.battleship.gui.CellPanel.BattleshipCellPanel.CellStatus.HIT;
+import static arth.battleship.gui.CellPanel.BattleshipCellPanel.CellStatus.KILL;
+
 public class EnemyBattleshipCellPanel extends BattleshipCellPanel {
 
     public EnemyBattleshipCellPanel(Cell cell) {
@@ -18,9 +21,11 @@ public class EnemyBattleshipCellPanel extends BattleshipCellPanel {
         Graphics2D g2d = (Graphics2D) g;
         Rectangle2D cell = new Rectangle2D.Double(0, 0, CELL_SIZE, CELL_SIZE);
 
-        g2d.setColor(Color.WHITE);
+        if (getStatus() == KILL)
+            g2d.setColor(Color.RED);
+        else
+            g2d.setColor(Color.WHITE);
         g2d.fill(cell);
-
 
         if (getStatus() == CellStatus.SELECTED)
             g2d.setColor(Color.RED);
@@ -28,7 +33,7 @@ public class EnemyBattleshipCellPanel extends BattleshipCellPanel {
             g2d.setColor(Color.BLACK);
         g2d.draw(cell);
 
-        if (getStatus() == CellStatus.HIT) {
+        if (getStatus() == HIT || getStatus() == KILL) {
             g2d.setStroke(new BasicStroke(2));
             Line2D cross1 = new Line2D.Double(0, 0, CELL_SIZE, CELL_SIZE);
             Line2D cross2 = new Line2D.Double(0, CELL_SIZE, CELL_SIZE, 0);
