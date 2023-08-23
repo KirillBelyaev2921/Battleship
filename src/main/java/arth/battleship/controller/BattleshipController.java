@@ -1,9 +1,7 @@
 package arth.battleship.controller;
 
 import arth.battleship.gui.BattleshipFrame;
-import arth.battleship.gui.MainMenuPanel;
-
-import javax.swing.*;
+import arth.battleship.gui.main_panel.MainPanel;
 
 public class BattleshipController {
     private final BattleshipFrame frame;
@@ -12,7 +10,7 @@ public class BattleshipController {
         frame = BattleshipFrame.getInstance();
     }
 
-    public void setMainPanel(JPanel panel) {
+    public void setMainPanel(MainPanel panel) {
         frame.setMainPanel(panel);
     }
 

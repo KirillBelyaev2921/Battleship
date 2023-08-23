@@ -8,22 +8,16 @@ import java.util.List;
 import java.util.Optional;
 
 public class Player implements Serializable {
-    private String playerName;
-
     private List<Battleship> battleships;
 
     public Player() {
         this.battleships = new ArrayList<>();
     }
 
-    public Player(String playerName, List<Battleship> battleships) {
-        this.playerName = playerName.strip();
+    public Player(List<Battleship> battleships) {
         this.battleships = battleships;
     }
 
-    public String getPlayerName() {
-        return playerName;
-    }
 
     public List<Battleship> getBattleships() {
         return battleships;

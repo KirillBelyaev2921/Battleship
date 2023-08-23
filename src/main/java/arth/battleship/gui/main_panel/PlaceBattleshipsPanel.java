@@ -1,41 +1,41 @@
-package arth.battleship.gui;
+package arth.battleship.gui.main_panel;
 
 import arth.battleship.controller.PlaceBattleshipsController;
-import arth.battleship.gui.BoardPanel.PlaceBattleshipsBoardPanel;
+import arth.battleship.gui.board.PlaceBattleshipsBoardPanel;
 
 import javax.swing.*;
 
 import static arth.battleship.constants.CommandLine.NOT_READY;
 
-public class PlaceBattleshipsPanel extends JPanel {
+public class PlaceBattleshipsPanel extends MainPanel {
     private PlaceBattleshipsController controller;
-    private JLabel playerNameLabel;
-    private JTextField playerName;
+    private JLabel placeBattleships;
     private PlaceBattleshipsBoardPanel board;
     private JCheckBox isReady;
 
     public PlaceBattleshipsPanel() {
-        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        this.setBorder(BorderFactory.createEmptyBorder(100, 100, 100, 100));
         controller = new PlaceBattleshipsController();
 
-        playerNameLabel = new JLabel("Enter name");
-        playerName = new JTextField();
+        setUpComponents();
+        addComponentsToPanel();
+    }
+
+    private void setUpComponents() {
+        placeBattleships = new JLabel("Place Battleships");
         isReady = new JCheckBox(NOT_READY.toString());
         isReady.addActionListener(e -> ready());
         isReady.setEnabled(false);
         board = new PlaceBattleshipsBoardPanel(isReady, controller);
+    }
 
-        this.add(playerNameLabel);
-        this.add(playerName);
+    private void addComponentsToPanel() {
+        this.add(placeBattleships);
         this.add(board);
         this.add(isReady);
     }
 
     private void ready() {
         boolean isPlayerReady = isReady.isSelected();
-        isReady.setText(controller.ready(isPlayerReady,
-                playerName.getText()));
-        playerName.setEnabled(!isPlayerReady);
+        isReady.setText(controller.ready(isPlayerReady));
     }
 }

@@ -1,49 +1,52 @@
-package arth.battleship.gui;
+package arth.battleship.gui.main_panel;
 
 import arth.battleship.constants.ShotResult;
-import arth.battleship.gui.BoardPanel.EnemyBoardPanel;
-import arth.battleship.gui.BoardPanel.PlayerBoardPanel;
+import arth.battleship.gui.board.EnemyBoardPanel;
+import arth.battleship.gui.board.PlayerBoardPanel;
 import arth.battleship.model.Cell;
 import arth.battleship.socket.PlayerSocket;
-import arth.battleship.controller.GameController;
+import arth.battleship.controller.BattleshipGameController;
 
 import javax.swing.*;
 
-public class BattleshipGamePanel extends JPanel {
-    private GameController controller;
+public class BattleshipGamePanel extends MainPanel {
+    private BattleshipGameController controller;
     private JLabel gameLabel;
-    private JTextArea turns;
+    private JLabel shotResult;
+    private JLabel isTurn;
+    private JPanel boards;
     private PlayerBoardPanel playerBoardPanel;
     private EnemyBoardPanel enemyBoardPanel;
     private JButton shootButton;
 
     public BattleshipGamePanel(PlayerSocket connection) {
-        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        this.setBorder(BorderFactory.createEmptyBorder(100, 100, 100, 100));
-        controller = new GameController(connection, this);
+        controller = new BattleshipGameController(connection, this);
 
+        setUpComponents(connection);
+        addComponentsToPanel();
+    }
+
+    private void setUpComponents(PlayerSocket connection) {
         gameLabel = new JLabel("Game");
-        turns = new JTextArea(10, 20);
-        turns.setLineWrap(true);
-        turns.setWrapStyleWord(true);
-        turns.setEditable(false);
-        JPanel boards = new JPanel();
-        JScrollPane theList = new JScrollPane(turns);
-        theList.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-        theList.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        theList.setAutoscrolls(true);
-        theList.setCorner(ScrollPaneConstants.LOWER_LEFT_CORNER, new JLabel());
+        shotResult = new JLabel(" ");
+        isTurn = new JLabel(" ");
+        boards = new JPanel();
+
         playerBoardPanel = new PlayerBoardPanel();
         playerBoardPanel.placeBattleships(connection.getPlayer().getBattleships());
         boards.add(playerBoardPanel);
+
         enemyBoardPanel = new EnemyBoardPanel();
         boards.add(enemyBoardPanel);
 
         shootButton = new JButton("Shoot");
         shootButton.addActionListener(e -> shootShip());
+    }
 
+    private void addComponentsToPanel() {
         this.add(gameLabel);
-        this.add(theList);
+        this.add(shotResult);
+        this.add(isTurn);
         this.add(boards);
         this.add(shootButton);
     }
@@ -55,11 +58,12 @@ public class BattleshipGamePanel extends JPanel {
     }
 
     public void displayResult(String readLine) {
-        turns.append(readLine + "\n");
+        shotResult.setText(readLine);
     }
 
     public void setTurn(boolean isPlayerTurn) {
         enemyBoardPanel.setTurn(isPlayerTurn);
+        isTurn.setText(isPlayerTurn ? "It is your turn" : "It is enemy's turn");
     }
 
     public void setEnemyCell(ShotResult result) {

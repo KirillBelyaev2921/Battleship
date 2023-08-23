@@ -1,4 +1,4 @@
-package arth.battleship.gui.CellPanel;
+package arth.battleship.gui.cell;
 
 import arth.battleship.model.Cell;
 
@@ -7,8 +7,8 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 
-import static arth.battleship.gui.CellPanel.BattleshipCellPanel.CellStatus.HIT;
-import static arth.battleship.gui.CellPanel.BattleshipCellPanel.CellStatus.KILL;
+import static arth.battleship.gui.cell.BattleshipCellPanel.CellStatus.HIT;
+import static arth.battleship.gui.cell.BattleshipCellPanel.CellStatus.KILL;
 
 public class EnemyBattleshipCellPanel extends BattleshipCellPanel {
 

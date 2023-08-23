@@ -63,6 +63,7 @@ public class HostPlayerSocket {
             throw new RuntimeException(e);
         }
     }
+
     class ServerHandler implements Runnable {
 
         @Override
@@ -79,9 +80,9 @@ public class HostPlayerSocket {
             }
         }
     }
+
     class ClientHandler implements Runnable {
         private final ObjectInputStream reader;
-
         private String address;
 
         public ClientHandler(SocketChannel clientSocket) {
@@ -122,6 +123,7 @@ public class HostPlayerSocket {
                 throw new RuntimeException(e);
             }
         }
+
         private void checkPlayersIsReady() {
             if (playersReadyCounter == 2) {
                 startGame();

@@ -1,20 +1,23 @@
-package arth.battleship.gui;
+package arth.battleship.gui.main_panel;
 
 import arth.battleship.controller.MainMenuController;
 
 import javax.swing.*;
 
-public class MainMenuPanel extends JPanel {
+public class MainMenuPanel extends MainPanel {
     private MainMenuController controller;
     private JButton createLobby;
     private JButton joinLobby;
     private JButton exit;
 
     public MainMenuPanel() {
-        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        this.setBorder(BorderFactory.createEmptyBorder(100, 100, 100, 100));
         controller = new MainMenuController();
 
+        setUpComponents();
+        addComponentsToPanel();
+    }
+
+    private void setUpComponents() {
         createLobby = new JButton("Create lobby");
         createLobby.addActionListener(e -> controller.createLobby());
 
@@ -23,7 +26,9 @@ public class MainMenuPanel extends JPanel {
 
         exit = new JButton("Exit");
         exit.addActionListener(e -> controller.exit());
+    }
 
+    private void addComponentsToPanel() {
         this.add(createLobby);
         this.add(joinLobby);
         this.add(exit);

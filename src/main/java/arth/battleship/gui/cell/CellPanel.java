@@ -1,4 +1,4 @@
-package arth.battleship.gui.CellPanel;
+package arth.battleship.gui.cell;
 
 import javax.swing.*;
 

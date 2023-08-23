@@ -1,7 +1,7 @@
 package arth.battleship.controller;
 
-import arth.battleship.gui.CreateLobbyPanel;
-import arth.battleship.gui.PlaceBattleshipsPanel;
+import arth.battleship.gui.main_panel.CreateLobbyPanel;
+import arth.battleship.gui.main_panel.PlaceBattleshipsPanel;
 
 public class MainMenuController extends BattleshipController {
 

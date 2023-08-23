@@ -1,10 +1,9 @@
-package arth.battleship.gui.BoardPanel;
+package arth.battleship.gui.board;
 
 import arth.battleship.constants.BattleshipCellPanelType;
-import arth.battleship.constants.CommandLine;
 import arth.battleship.controller.PlaceBattleshipsController;
-import arth.battleship.gui.CellPanel.BattleshipCellPanel;
-import arth.battleship.gui.CellPanel.PlaceBattleshipCellPanel;
+import arth.battleship.gui.cell.BattleshipCellPanel;
+import arth.battleship.gui.cell.PlaceBattleshipCellPanel;
 
 import javax.swing.*;
 import java.awt.event.MouseEvent;
@@ -25,14 +24,6 @@ public class PlaceBattleshipsBoardPanel extends BoardPanel {
                 .forEach(cellsRow -> cellsRow
                         .forEach(cell -> cell.addMouseListener(new ShipPlaceListener())));
     }
-
-
-    /*
-    public void setCell(String result, String cell) {
-        List<Integer> cellCoordinate = CellCoordinateFormatter.stringToNumericList(cell);
-        if (result.equals("Miss"))
-            cells.get(cellCoordinate.get(0) + 1).get(cellCoordinate.get(1)).setStatus(CellPanel.CellStatus.MISS);
-    }*/
 
     private class ShipPlaceListener implements MouseListener {
 

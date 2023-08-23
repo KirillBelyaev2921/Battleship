@@ -1,10 +1,9 @@
-package arth.battleship.gui.BoardPanel;
+package arth.battleship.gui.board;
 
 import arth.battleship.constants.BattleshipCellPanelType;
 import arth.battleship.constants.ShotResult;
-import arth.battleship.controller.GameController;
-import arth.battleship.gui.CellPanel.BattleshipCellPanel;
-import arth.battleship.gui.CellPanel.EnemyBattleshipCellPanel;
+import arth.battleship.gui.cell.BattleshipCellPanel;
+import arth.battleship.gui.cell.EnemyBattleshipCellPanel;
 import arth.battleship.model.Cell;
 
 import java.awt.event.MouseEvent;

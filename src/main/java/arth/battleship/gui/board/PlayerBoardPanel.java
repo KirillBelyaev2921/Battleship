@@ -1,15 +1,15 @@
-package arth.battleship.gui.BoardPanel;
+package arth.battleship.gui.board;
 
 import arth.battleship.constants.BattleshipCellPanelType;
 import arth.battleship.constants.ShotResult;
-import arth.battleship.gui.CellPanel.BattleshipCellPanel;
+import arth.battleship.gui.cell.BattleshipCellPanel;
 import arth.battleship.model.Battleship;
 import arth.battleship.model.Cell;
 
 import java.util.List;
 
-import static arth.battleship.gui.CellPanel.BattleshipCellPanel.CellStatus.HIT;
-import static arth.battleship.gui.CellPanel.BattleshipCellPanel.CellStatus.MISS;
+import static arth.battleship.gui.cell.BattleshipCellPanel.CellStatus.HIT;
+import static arth.battleship.gui.cell.BattleshipCellPanel.CellStatus.MISS;
 
 public class PlayerBoardPanel extends BoardPanel {
     public PlayerBoardPanel() {

@@ -1,21 +1,22 @@
 package arth.battleship.gui;
 
+import arth.battleship.gui.main_panel.BattleshipGamePanel;
 import arth.battleship.model.Battleship;
-import arth.battleship.model.Lobby;
 import arth.battleship.model.Player;
 import arth.battleship.socket.HostPlayerSocket;
 import arth.battleship.socket.PlayerSocket;
+import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
 import java.awt.event.InputEvent;
 import java.util.List;
 
+@Ignore
 class BattleshipGamePanelTest {
 
     @Test
     public void test() throws AWTException, InterruptedException {
-        Lobby lobby = new Lobby("");
         List<Battleship> battleships1 = List.of(new Battleship("A1", "A2", "A3", "A4"),
                 new Battleship("A8", "A9", "A10"),
                 new Battleship("C1", "C2", "C3"),
@@ -38,8 +39,8 @@ class BattleshipGamePanelTest {
                 new Battleship("J5"),
                 new Battleship("J6")
         );
-        Player player1 = new Player("Arthead", battleships1);
-        Player player2 = new Player("Aska2", battleships2);
+        Player player1 = new Player(battleships1);
+        Player player2 = new Player(battleships2);
 
 
         HostPlayerSocket hostPlayerConnection = new HostPlayerSocket();

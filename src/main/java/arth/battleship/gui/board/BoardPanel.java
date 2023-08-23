@@ -1,9 +1,9 @@
-package arth.battleship.gui.BoardPanel;
+package arth.battleship.gui.board;
 
 import arth.battleship.constants.BattleshipCellPanelType;
-import arth.battleship.gui.CellPanel.BattleshipCellPanel;
-import arth.battleship.gui.CellPanel.BattleshipCellPanelFactory;
-import arth.battleship.gui.CellPanel.LabelCellPanel;
+import arth.battleship.gui.cell.BattleshipCellPanel;
+import arth.battleship.gui.cell.BattleshipCellPanelFactory;
+import arth.battleship.gui.cell.LabelCellPanel;
 import arth.battleship.model.Cell;
 
 import javax.swing.*;
@@ -12,15 +12,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static arth.battleship.constants.BattleshipGameSettings.BOARD_SIZE;
-import static arth.battleship.gui.CellPanel.BattleshipCellPanel.CellStatus.*;
+import static arth.battleship.gui.cell.BattleshipCellPanel.CellStatus.*;
 
 public abstract class BoardPanel extends JPanel {
-    private final List<List<BattleshipCellPanel>> cells;
+    private List<List<BattleshipCellPanel>> cells;
 
     public BoardPanel(BattleshipCellPanelType type) {
+        setUpMainPanel();
+        setUpBoard(type);
+    }
+
+    private void setUpMainPanel() {
         this.setPreferredSize(new Dimension(400, 400));
         this.setLayout(new GridLayout(11, 11));
+    }
 
+    private void setUpBoard(BattleshipCellPanelType type) {
         cells = new ArrayList<>();
         this.add(new LabelCellPanel(""));
 

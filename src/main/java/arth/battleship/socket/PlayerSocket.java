@@ -2,9 +2,9 @@ package arth.battleship.socket;
 
 import arth.battleship.constants.CommandLine;
 import arth.battleship.constants.ShotResult;
-import arth.battleship.controller.GameController;
+import arth.battleship.controller.BattleshipGameController;
 import arth.battleship.gui.BattleshipFrame;
-import arth.battleship.gui.BattleshipGamePanel;
+import arth.battleship.gui.main_panel.BattleshipGamePanel;
 import arth.battleship.model.Cell;
 import arth.battleship.model.Player;
 
@@ -19,7 +19,7 @@ import static arth.battleship.constants.CommandLine.*;
 public class PlayerSocket {
 
     private Player player;
-    private GameController controller;
+    private BattleshipGameController controller;
     private ObjectInputStream reader;
     private ObjectOutputStream writer;
 
@@ -87,9 +87,10 @@ public class PlayerSocket {
         }
     }
 
-    public void setController(GameController gameController) {
+    public void setController(BattleshipGameController gameController) {
         this.controller = gameController;
     }
+
     public class IncomingReader implements Runnable {
         public void run() {
             try {
@@ -99,8 +100,7 @@ public class PlayerSocket {
                     switch (command) {
                         case GAME_START -> startGame();
                         case GET_SHOT_RESULT -> setShotResult(controller.getShotResult((Cell) reader.readObject()));
-                        case SHOT_RESULT ->
-                                controller.shotResult((ShotResult) reader.readObject());
+                        case SHOT_RESULT -> controller.shotResult((ShotResult) reader.readObject());
                     }
                 }
             } catch (IOException ex) {
@@ -114,16 +114,13 @@ public class PlayerSocket {
 
     private void startGame() throws IOException, ClassNotFoundException {
         BattleshipFrame.getInstance().setMainPanel(new BattleshipGamePanel(this));
-        controller.displayMessage("Game started!\n");
         showTurn((boolean) reader.readObject());
     }
 
     private void showTurn(boolean isPlayerTurn) {
         if (isPlayerTurn) {
-            controller.displayMessage("It is your turn");
             controller.setTurn(true);
         } else {
-            controller.displayMessage("This is your opponent's turn");
             controller.setTurn(false);
         }
     }
