@@ -1,6 +1,7 @@
 package arth.battleship.gui.main_panel;
 
 import arth.battleship.controller.PlaceBattleshipsController;
+import arth.battleship.gui.board.BoardPanel;
 import arth.battleship.gui.board.PlaceBattleshipsBoardPanel;
 
 import javax.swing.*;
@@ -10,7 +11,7 @@ import static arth.battleship.constants.CommandLine.NOT_READY;
 public class PlaceBattleshipsPanel extends MainPanel {
     private PlaceBattleshipsController controller;
     private JLabel placeBattleships;
-    private PlaceBattleshipsBoardPanel board;
+    private BoardPanel board;
     private JCheckBox isReady;
 
     public PlaceBattleshipsPanel() {

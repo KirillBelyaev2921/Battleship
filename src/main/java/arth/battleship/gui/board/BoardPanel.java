@@ -1,13 +1,12 @@
 package arth.battleship.gui.board;
 
-import arth.battleship.constants.BattleshipCellPanelType;
 import arth.battleship.gui.cell.BattleshipCellPanel;
-import arth.battleship.gui.cell.BattleshipCellPanelFactory;
 import arth.battleship.gui.cell.LabelCellPanel;
 import arth.battleship.model.Cell;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,9 +16,9 @@ import static arth.battleship.gui.cell.BattleshipCellPanel.CellStatus.*;
 public abstract class BoardPanel extends JPanel {
     private List<List<BattleshipCellPanel>> cells;
 
-    public BoardPanel(BattleshipCellPanelType type) {
+    public BoardPanel() {
         setUpMainPanel();
-        setUpBoard(type);
+        setUpBoard();
     }
 
     private void setUpMainPanel() {
@@ -27,11 +26,9 @@ public abstract class BoardPanel extends JPanel {
         this.setLayout(new GridLayout(11, 11));
     }
 
-    private void setUpBoard(BattleshipCellPanelType type) {
+    private void setUpBoard() {
         cells = new ArrayList<>();
         this.add(new LabelCellPanel(""));
-
-        BattleshipCellPanelFactory factory = new BattleshipCellPanelFactory();
 
         for (int i = 0; i < 10; i++) {
             this.add(new LabelCellPanel(Integer.toString(i + 1)));
@@ -41,7 +38,8 @@ public abstract class BoardPanel extends JPanel {
             List<BattleshipCellPanel> cellsRow = new ArrayList<>();
             this.add(new LabelCellPanel(new Cell(i, 0).toString().substring(0, 1)));
             for (int j = 0; j < 10; j++) {
-                BattleshipCellPanel cell = factory.createBattleshipCellPanel(type, new Cell(i, j));
+                BattleshipCellPanel cell = createCellPanel(new Cell(i, j));
+                cell.addMouseListener(createMouseListener());
                 cellsRow.add(cell);
                 this.add(cell);
             }
@@ -78,4 +76,8 @@ public abstract class BoardPanel extends JPanel {
         sinkBattleship(i + 1, j);
         sinkBattleship(i + 1, j + 1);
     }
+
+    protected abstract BattleshipCellPanel createCellPanel(Cell cell);
+
+    protected abstract MouseListener createMouseListener();
 }

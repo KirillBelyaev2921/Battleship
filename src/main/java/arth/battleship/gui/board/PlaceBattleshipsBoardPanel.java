@@ -1,9 +1,9 @@
 package arth.battleship.gui.board;
 
-import arth.battleship.constants.BattleshipCellPanelType;
 import arth.battleship.controller.PlaceBattleshipsController;
 import arth.battleship.gui.cell.BattleshipCellPanel;
 import arth.battleship.gui.cell.PlaceBattleshipCellPanel;
+import arth.battleship.model.Cell;
 
 import javax.swing.*;
 import java.awt.event.MouseEvent;
@@ -17,12 +17,19 @@ public class PlaceBattleshipsBoardPanel extends BoardPanel {
     private JCheckBox isReadyCheckBox;
 
     public PlaceBattleshipsBoardPanel(JCheckBox isReadyCheckBox, PlaceBattleshipsController controller) {
-        super(BattleshipCellPanelType.PLACE_BATTLESHIP_CELL_PANEL_TYPE);
+        super();
         this.controller = controller;
         this.isReadyCheckBox = isReadyCheckBox;
-        getCells()
-                .forEach(cellsRow -> cellsRow
-                        .forEach(cell -> cell.addMouseListener(new ShipPlaceListener())));
+    }
+
+    @Override
+    protected BattleshipCellPanel createCellPanel(Cell cell) {
+        return new PlaceBattleshipCellPanel(cell);
+    }
+
+    @Override
+    protected MouseListener createMouseListener() {
+        return new ShipPlaceListener();
     }
 
     private class ShipPlaceListener implements MouseListener {

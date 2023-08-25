@@ -1,6 +1,5 @@
 package arth.battleship.gui.board;
 
-import arth.battleship.constants.BattleshipCellPanelType;
 import arth.battleship.constants.ShotResult;
 import arth.battleship.gui.cell.BattleshipCellPanel;
 import arth.battleship.gui.cell.EnemyBattleshipCellPanel;
@@ -14,15 +13,6 @@ import static arth.battleship.constants.ShotResult.*;
 public class EnemyBoardPanel extends BoardPanel {
     private Cell cellToShoot;
     private boolean isTurn;
-
-    public EnemyBoardPanel() {
-        super(BattleshipCellPanelType.ENEMY_BATTLESHIP_CELL_PANEL_TYPE);
-
-        getCells()
-                .forEach(cellsRow -> cellsRow
-                        .forEach(cell -> cell.addMouseListener(new ShipShootListener())));
-
-    }
 
     public void setTurn(boolean b) {
         this.isTurn = b;
@@ -40,6 +30,16 @@ public class EnemyBoardPanel extends BoardPanel {
 
     public Cell getCellToShoot() {
         return cellToShoot;
+    }
+
+    @Override
+    protected BattleshipCellPanel createCellPanel(Cell cell) {
+        return new EnemyBattleshipCellPanel(cell);
+    }
+
+    @Override
+    protected MouseListener createMouseListener() {
+        return new ShipShootListener();
     }
 
 
