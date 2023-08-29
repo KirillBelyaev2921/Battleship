@@ -38,7 +38,7 @@ public class Player implements Serializable {
         if (battleships.size() != 0) {
             return ShotResult.KILL;
         }
-        return ShotResult.WIN;
+        return ShotResult.END;
     }
 
     public void removeBattleship(Battleship battleship) {

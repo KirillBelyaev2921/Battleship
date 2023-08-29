@@ -1,7 +1,7 @@
 package arth.battleship.constants;
 
 public enum ShotResult {
-    MISS, HIT, KILL, WIN;
+    MISS, HIT, KILL, END;
 
     @Override
     public String toString() {
@@ -9,7 +9,7 @@ public enum ShotResult {
             case MISS -> "Miss";
             case HIT -> "Hit";
             case KILL -> "Kill";
-            case WIN -> "Win";
+            case END -> "Win";
         };
     }
 }
