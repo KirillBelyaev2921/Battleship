@@ -46,7 +46,7 @@ public class HostPlayerSocket {
         try {
             int writerIndexToShot = addresses.indexOf(address) == 0 ? 1 : 0;
             ObjectOutputStream writer = writers.get(writerIndexToShot);
-            writer.writeObject(GET_SHOT_RESULT);
+            writer.writeObject(SHOT_PLAYER);
             writer.writeObject(cell);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -113,7 +113,7 @@ public class HostPlayerSocket {
                             Cell cell = (Cell) reader.readObject();
                             shoot(address, cell);
                         }
-                        case SET_SHOT_RESULT -> showShotResult(address, (ShotResult) reader.readObject());
+                        case SHOT_PLAYER_RESULT -> showShotResult(address, (ShotResult) reader.readObject());
                     }
                 }
             } catch (IOException e) {

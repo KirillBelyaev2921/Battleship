@@ -7,7 +7,7 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 
-import static arth.battleship.gui.cell.BattleshipCellPanel.CellStatus.*;
+import static arth.battleship.constants.CellStatus.*;
 
 public class PlayerBattleshipCellPanel extends BattleshipCellPanel {
 

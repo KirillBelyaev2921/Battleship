@@ -2,7 +2,10 @@ package arth.battleship.model;
 
 import arth.battleship.constants.CellStatus;
 import arth.battleship.constants.ShotResult;
-import arth.battleship.controller.BattleshipsBuilder;
+import arth.battleship.observers.EnemyBoardObserver;
+import arth.battleship.observers.PlayerBoardObserver;
+
+import java.util.List;
 
 import static arth.battleship.constants.BattleshipGameSettings.BOARD_SIZE;
 
@@ -25,6 +28,7 @@ public abstract class Board {
 
     public void setCellStatus(Cell cell, CellStatus cellStatus) {
         getCell(cell).setStatus(cellStatus);
+        notifyObservers(cell, cellStatus);
     }
 
     public CellStatus getCellStatus(Cell cell) {
@@ -42,13 +46,13 @@ public abstract class Board {
             return;
         BattleshipCell cell = getCell(new Cell(i, j));
         if (cell.getStatus() == CellStatus.EMPTY) {
-            cell.setStatus(CellStatus.MISS);
+            setCellStatus(cell, CellStatus.MISS);
             return;
         }
         if (cell.getStatus() != CellStatus.HIT) {
             return;
         }
-        cell.setStatus(CellStatus.KILL);
+        setCellStatus(cell, CellStatus.KILL);
         sinkBattleship(i - 1, j - 1);
         sinkBattleship(i - 1, j);
         sinkBattleship(i - 1, j + 1);
@@ -61,5 +65,16 @@ public abstract class Board {
 
     public ShotResult getShotResult(Cell cell) {
         return null;
+    }
+
+    public abstract void notifyObservers(Cell cell, CellStatus cellStatus);
+
+    public void registerObserver(PlayerBoardObserver o) {
+    }
+
+    public void registerObserver(EnemyBoardObserver o) {
+    }
+
+    public void setBattleships(List<Battleship> battleships) {
     }
 }

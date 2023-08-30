@@ -1,5 +1,6 @@
 package arth.battleship.gui.cell;
 
+import arth.battleship.constants.CellStatus;
 import arth.battleship.model.Cell;
 
 import java.awt.*;
@@ -7,8 +8,8 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 
-import static arth.battleship.gui.cell.BattleshipCellPanel.CellStatus.HIT;
-import static arth.battleship.gui.cell.BattleshipCellPanel.CellStatus.KILL;
+import static arth.battleship.constants.CellStatus.HIT;
+import static arth.battleship.constants.CellStatus.KILL;
 
 public class EnemyBattleshipCellPanel extends BattleshipCellPanel {
 
@@ -21,7 +22,7 @@ public class EnemyBattleshipCellPanel extends BattleshipCellPanel {
         Graphics2D g2d = (Graphics2D) g;
         Rectangle2D cell = new Rectangle2D.Double(0, 0, CELL_SIZE, CELL_SIZE);
 
-        if (getStatus() == KILL)
+        if (getStatus() == CellStatus.KILL)
             g2d.setColor(Color.RED);
         else
             g2d.setColor(Color.WHITE);
@@ -33,7 +34,7 @@ public class EnemyBattleshipCellPanel extends BattleshipCellPanel {
             g2d.setColor(Color.BLACK);
         g2d.draw(cell);
 
-        if (getStatus() == HIT || getStatus() == KILL) {
+        if (getStatus() == CellStatus.HIT || getStatus() == CellStatus.KILL) {
             g2d.setStroke(new BasicStroke(2));
             Line2D cross1 = new Line2D.Double(0, 0, CELL_SIZE, CELL_SIZE);
             Line2D cross2 = new Line2D.Double(0, CELL_SIZE, CELL_SIZE, 0);

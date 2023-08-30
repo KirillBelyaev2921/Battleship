@@ -1,6 +1,11 @@
 package arth.battleship.model;
 
+import arth.battleship.constants.CellStatus;
 import arth.battleship.constants.ShotResult;
+import arth.battleship.observers.EnemyBoardObserver;
+import arth.battleship.observers.PlayerBoardObserver;
+
+import java.util.List;
 
 public class Game {
     private boolean isPlayerTurn;
@@ -15,9 +20,37 @@ public class Game {
     public void setShotEnemyResult(ShotResult result, Cell cell) {
         enemyBoard.shotCell(result, cell);
     }
-    public ShotResult setShotPlayerResult(Cell cell) {
+
+    public ShotResult getResultAndShotPlayer(Cell cell) {
         ShotResult result = playerBoard.getShotResult(cell);
         playerBoard.shotCell(result, cell);
         return result;
+    }
+
+    public void setEnemyCellStatus(Cell cell, CellStatus status) {
+        enemyBoard.setCellStatus(cell, status);
+    }
+
+    public CellStatus getEnemyCellStatus(Cell cell) {
+        return enemyBoard.getCellStatus(cell);
+    }
+
+    public boolean isPlayerTurn() {
+        return isPlayerTurn;
+    }
+
+    public void setPlayerTurn(boolean playerTurn) {
+        isPlayerTurn = playerTurn;
+    }
+    public void registerObserver(PlayerBoardObserver o) {
+        playerBoard.registerObserver(o);
+    }
+
+    public void registerObserver(EnemyBoardObserver o) {
+        enemyBoard.registerObserver(o);
+    }
+
+    public void setBattleships(List<Battleship> battleships) {
+        playerBoard.setBattleships(battleships);
     }
 }

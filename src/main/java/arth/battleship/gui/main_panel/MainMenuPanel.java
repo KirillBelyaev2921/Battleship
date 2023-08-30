@@ -1,18 +1,17 @@
 package arth.battleship.gui.main_panel;
 
-import arth.battleship.controller.MainMenuController;
+import arth.battleship.controller.BattleshipController;
 
 import javax.swing.*;
 
 public class MainMenuPanel extends MainPanel {
-    private MainMenuController controller;
+    private final BattleshipController controller;
     private JButton createLobby;
     private JButton joinLobby;
     private JButton exit;
 
-    public MainMenuPanel() {
-        controller = new MainMenuController();
-
+    public MainMenuPanel(BattleshipController controller) {
+        this.controller = controller;
         setUpComponents();
         addComponentsToPanel();
     }
@@ -22,7 +21,7 @@ public class MainMenuPanel extends MainPanel {
         createLobby.addActionListener(e -> controller.createLobby());
 
         joinLobby = new JButton("Join lobby");
-        joinLobby.addActionListener(e -> controller.chooseLobby());
+        joinLobby.addActionListener(e -> controller.joinLobby());
 
         exit = new JButton("Exit");
         exit.addActionListener(e -> controller.exit());
@@ -32,5 +31,10 @@ public class MainMenuPanel extends MainPanel {
         this.add(createLobby);
         this.add(joinLobby);
         this.add(exit);
+    }
+
+    @Override
+    public void displayMessage(String[] message) {
+        throw new UnsupportedOperationException();
     }
 }

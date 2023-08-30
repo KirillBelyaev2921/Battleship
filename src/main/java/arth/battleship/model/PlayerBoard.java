@@ -2,25 +2,25 @@ package arth.battleship.model;
 
 import arth.battleship.constants.CellStatus;
 import arth.battleship.constants.ShotResult;
+import arth.battleship.observers.PlayerBoardObserver;
 
 import java.util.List;
 import java.util.Optional;
 
 public class PlayerBoard extends Board {
-    private final List<Battleship> battleships;
+    private List<Battleship> battleships;
+    private PlayerBoardObserver observer;
 
-    public PlayerBoard(List<Battleship> battleships) {
+    public PlayerBoard() {
         super();
-        this.battleships = battleships;
-        battleships.forEach(battleship -> battleship.getShipCells().forEach(cell -> setCellStatus(cell, CellStatus.SHIP)));
     }
 
     @Override
     public void shotCell(ShotResult result, Cell cell) {
         if (result == ShotResult.MISS)
-            getCell(cell).setStatus(CellStatus.MISS);
+            setCellStatus(cell, CellStatus.MISS);
         else
-            getCell(cell).setStatus(CellStatus.HIT);
+            setCellStatus(cell, CellStatus.HIT);
         if (result == ShotResult.KILL || result == ShotResult.END)
             sinkBattleship(cell.getI(), cell.getJ());
     }
@@ -47,4 +47,18 @@ public class PlayerBoard extends Board {
         return ShotResult.END;
     }
 
+    @Override
+    public void notifyObservers(Cell cell, CellStatus cellStatus) {
+        observer.update(cell, cellStatus);
+    }
+
+    @Override
+    public void registerObserver(PlayerBoardObserver o) {
+        this.observer = o;
+    }
+
+    public void setBattleships(List<Battleship> battleships) {
+        this.battleships = battleships;
+        battleships.forEach(battleship -> battleship.getShipCells().forEach(cell -> setCellStatus(cell, CellStatus.SHIP)));
+    }
 }

@@ -1,14 +1,20 @@
 package arth.battleship.gui;
 
+import arth.battleship.controller.BattleshipController;
+import arth.battleship.gui.main_panel.BattleshipGamePanel;
+import arth.battleship.gui.main_panel.MainMenuPanel;
 import arth.battleship.gui.main_panel.MainPanel;
+import arth.battleship.gui.main_panel.PlaceBattleshipsPanel;
 
 import javax.swing.*;
 
 public class BattleshipFrame extends JFrame {
-    private static BattleshipFrame frame;
+    private final BattleshipController controller;
+    private MainPanel mainPanel;
 
-    private BattleshipFrame() {
+    public BattleshipFrame(BattleshipController controller) {
         setUpFrame();
+        this.controller = controller;
     }
 
     public void setUpFrame() {
@@ -17,17 +23,16 @@ public class BattleshipFrame extends JFrame {
         this.setVisible(true);
     }
 
-    public static BattleshipFrame getInstance() {
-        if (frame == null) {
-            frame = new BattleshipFrame();
-        }
-        return frame;
-    }
 
     public void setMainPanel(MainPanel panel) {
-        frame.getContentPane().removeAll();
-        frame.getContentPane().add(panel);
-        frame.pack();
+        mainPanel = panel;
+        this.getContentPane().removeAll();
+        this.getContentPane().add(panel);
+        this.pack();
+    }
+
+    public void displayMessage(String[] message) {
+        mainPanel.displayMessage(message);
     }
 
 }

@@ -2,11 +2,8 @@ package arth.battleship.socket;
 
 import arth.battleship.constants.CommandLine;
 import arth.battleship.constants.ShotResult;
-import arth.battleship.controller.BattleshipGameController;
-import arth.battleship.gui.BattleshipFrame;
-import arth.battleship.gui.main_panel.BattleshipGamePanel;
+import arth.battleship.controller.BattleshipController;
 import arth.battleship.model.Cell;
-import arth.battleship.model.Player;
 
 import java.io.*;
 import java.net.InetSocketAddress;
@@ -18,26 +15,16 @@ import static arth.battleship.constants.CommandLine.*;
 
 public class PlayerSocket {
 
-    private Player player;
-    private BattleshipGameController controller;
+    private BattleshipController controller;
     private ObjectInputStream reader;
     private ObjectOutputStream writer;
 
-    public PlayerSocket(Player player) {
-        this.player = player;
+    public PlayerSocket(BattleshipController controller) {
+        this.controller = controller;
         setUpNetworking();
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(new IncomingReader());
     }
-
-    public void setPlayer(Player player) {
-        this.player = player;
-    }
-
-    public Player getPlayer() {
-        return player;
-    }
-
 
     private void setUpNetworking() {
         try {
@@ -53,22 +40,13 @@ public class PlayerSocket {
         }
     }
 
-    public void setReady() {
+    public void setReady(boolean isReady) {
         try {
-            writer.writeObject(READY);
+            writer.writeObject(isReady ? READY : NOT_READY);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
-
-    public void setNotReady() {
-        try {
-            writer.writeObject(NOT_READY);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public void shootShip(Cell cell) {
         try {
             writer.writeObject(SHOT);
@@ -80,14 +58,14 @@ public class PlayerSocket {
 
     private void setShotResult(ShotResult shotResult) {
         try {
-            writer.writeObject(SET_SHOT_RESULT);
+            writer.writeObject(SHOT_PLAYER_RESULT);
             writer.writeObject(shotResult);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void setController(BattleshipGameController gameController) {
+    public void setController(BattleshipController gameController) {
         this.controller = gameController;
     }
 
@@ -99,8 +77,8 @@ public class PlayerSocket {
                     CommandLine command = (CommandLine) message;
                     switch (command) {
                         case GAME_START -> startGame();
-                        case GET_SHOT_RESULT -> setShotResult(controller.getShotResult((Cell) reader.readObject()));
-                        case SHOT_RESULT -> controller.shotResult((ShotResult) reader.readObject());
+                        case SHOT_PLAYER -> setShotResult(controller.shotPlayer((Cell) reader.readObject()));
+                        case SHOT_RESULT -> controller.shotEnemyResult((ShotResult) reader.readObject());
                     }
                 }
             } catch (IOException ex) {
@@ -113,15 +91,7 @@ public class PlayerSocket {
     }
 
     private void startGame() throws IOException, ClassNotFoundException {
-        BattleshipFrame.getInstance().setMainPanel(new BattleshipGamePanel(this));
-        showTurn((boolean) reader.readObject());
+        controller.startGame((boolean) reader.readObject());
     }
 
-    private void showTurn(boolean isPlayerTurn) {
-        if (isPlayerTurn) {
-            controller.setTurn(true);
-        } else {
-            controller.setTurn(false);
-        }
-    }
 }

@@ -1,5 +1,6 @@
 package arth.battleship.gui.cell;
 
+import arth.battleship.constants.CellStatus;
 import arth.battleship.model.Cell;
 
 import java.awt.*;
@@ -28,10 +29,6 @@ public abstract class BattleshipCellPanel extends CellPanel {
 
     public boolean notEmpty() {
         return status == CellStatus.HIT || status == CellStatus.MISS;
-    }
-
-    public enum CellStatus {
-        EMPTY, SHIP, HIT, KILL, MISS, SELECTED
     }
 
 }

@@ -1,6 +1,6 @@
 package arth.battleship.gui.main_panel;
 
-import arth.battleship.controller.PlaceBattleshipsController;
+import arth.battleship.controller.BattleshipController;
 import arth.battleship.gui.board.BoardPanel;
 import arth.battleship.gui.board.PlaceBattleshipsBoardPanel;
 
@@ -9,13 +9,13 @@ import javax.swing.*;
 import static arth.battleship.constants.CommandLine.NOT_READY;
 
 public class PlaceBattleshipsPanel extends MainPanel {
-    private PlaceBattleshipsController controller;
+    private final BattleshipController controller;
     private JLabel placeBattleships;
     private BoardPanel board;
     private JCheckBox isReady;
 
-    public PlaceBattleshipsPanel() {
-        controller = new PlaceBattleshipsController();
+    public PlaceBattleshipsPanel(BattleshipController controller) {
+        this.controller = controller;
 
         setUpComponents();
         addComponentsToPanel();
@@ -37,6 +37,11 @@ public class PlaceBattleshipsPanel extends MainPanel {
 
     private void ready() {
         boolean isPlayerReady = isReady.isSelected();
-        isReady.setText(controller.ready(isPlayerReady));
+        controller.setReady(isPlayerReady);
+    }
+
+    @Override
+    public void displayMessage(String[] message) {
+        isReady.setText(message[0]);
     }
 }

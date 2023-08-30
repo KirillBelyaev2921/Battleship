@@ -1,6 +1,7 @@
 package arth.battleship.gui.board;
 
-import arth.battleship.controller.PlaceBattleshipsController;
+import arth.battleship.constants.CellStatus;
+import arth.battleship.controller.BattleshipController;
 import arth.battleship.gui.cell.BattleshipCellPanel;
 import arth.battleship.gui.cell.PlaceBattleshipCellPanel;
 import arth.battleship.model.Cell;
@@ -9,17 +10,14 @@ import javax.swing.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import static arth.battleship.constants.CommandLine.NOT_READY;
-import static arth.battleship.constants.CommandLine.READY;
-
 public class PlaceBattleshipsBoardPanel extends BoardPanel {
-    private PlaceBattleshipsController controller;
+    private BattleshipController controller;
     private JCheckBox isReadyCheckBox;
 
-    public PlaceBattleshipsBoardPanel(JCheckBox isReadyCheckBox, PlaceBattleshipsController controller) {
+    public PlaceBattleshipsBoardPanel(JCheckBox isReadyCheckBox, BattleshipController controller) {
         super();
-        this.controller = controller;
         this.isReadyCheckBox = isReadyCheckBox;
+        this.controller = controller;
     }
 
     @Override
@@ -37,16 +35,13 @@ public class PlaceBattleshipsBoardPanel extends BoardPanel {
         @Override
         public void mousePressed(MouseEvent e) {
             if (!isReadyCheckBox.isSelected()) {
-                isReadyCheckBox.setEnabled(false);
                 PlaceBattleshipCellPanel cellPanel = (PlaceBattleshipCellPanel) e.getComponent();
                 if (cellPanel.notEmpty())
-                    cellPanel.setStatus(BattleshipCellPanel.CellStatus.EMPTY);
+                    cellPanel.setStatus(CellStatus.EMPTY);
                 else
-                    cellPanel.setStatus(BattleshipCellPanel.CellStatus.HIT);
-
-                String response = controller.updatePlayerBattleships(cellPanel.notEmpty(), cellPanel.getCell().getI(), cellPanel.getCell().getJ());
-                isReadyCheckBox.setText(response.equals(READY.toString()) ? NOT_READY.toString() : response);
-                isReadyCheckBox.setEnabled(response.equals(READY.toString()));
+                    cellPanel.setStatus(CellStatus.HIT);
+                boolean response = controller.updateBattleshipCell(cellPanel.notEmpty(), cellPanel.getCell());
+                isReadyCheckBox.setEnabled(response);
                 repaint();
             }
         }

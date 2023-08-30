@@ -7,4 +7,6 @@ public abstract class MainPanel extends JPanel {
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.setBorder(BorderFactory.createEmptyBorder(100, 100, 100, 100));
     }
+
+    public abstract void displayMessage(String[] message);
 }

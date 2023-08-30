@@ -10,9 +10,6 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import static arth.battleship.constants.BattleshipGameSettings.BOARD_SIZE;
-import static arth.battleship.gui.cell.BattleshipCellPanel.CellStatus.*;
-
 public abstract class BoardPanel extends JPanel {
     private List<List<BattleshipCellPanel>> cells;
 
@@ -46,38 +43,13 @@ public abstract class BoardPanel extends JPanel {
             cells.add(cellsRow);
         }
     }
-
-    public List<List<BattleshipCellPanel>> getCells() {
-        return cells;
-    }
-
     public BattleshipCellPanel getBattleshipCellPanelByCell(Cell cell) {
         return cells.get(cell.getI()).get(cell.getJ());
-    }
-
-    public void sinkBattleship(int i, int j) {
-        if (i < 0 || j < 0 || i >= BOARD_SIZE || j >= BOARD_SIZE)
-            return;
-        BattleshipCellPanel cell = getBattleshipCellPanelByCell(new Cell(i, j));
-        if (cell.getStatus() == EMPTY) {
-            cell.setStatus(MISS);
-            return;
-        }
-        if (cell.getStatus() != HIT) {
-            return;
-        }
-        cell.setStatus(KILL);
-        sinkBattleship(i - 1, j - 1);
-        sinkBattleship(i - 1, j);
-        sinkBattleship(i - 1, j + 1);
-        sinkBattleship(i, j - 1);
-        sinkBattleship(i, j + 1);
-        sinkBattleship(i + 1, j - 1);
-        sinkBattleship(i + 1, j);
-        sinkBattleship(i + 1, j + 1);
     }
 
     protected abstract BattleshipCellPanel createCellPanel(Cell cell);
 
     protected abstract MouseListener createMouseListener();
+
+
 }

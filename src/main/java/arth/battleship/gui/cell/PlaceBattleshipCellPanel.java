@@ -1,5 +1,6 @@
 package arth.battleship.gui.cell;
 
+import arth.battleship.constants.CellStatus;
 import arth.battleship.model.Cell;
 
 import java.awt.*;
