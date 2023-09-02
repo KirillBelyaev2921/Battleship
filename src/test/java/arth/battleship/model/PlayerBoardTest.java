@@ -42,7 +42,8 @@ class PlayerBoardTest {
 
     @Test
     public void setCellStatus() {
-        PlayerBoard playerBoard = new PlayerBoard(battleships);
+        PlayerBoard playerBoard = new PlayerBoard();
+        playerBoard.setBattleships(battleships);
         Cell cell = new Cell("A1");
         CellStatus cellStatus = CellStatus.HIT;
 
@@ -55,7 +56,8 @@ class PlayerBoardTest {
 
     @Test
     void shotOneCellAndHit() {
-        PlayerBoard playerBoard = new PlayerBoard(battleships);
+        PlayerBoard playerBoard = new PlayerBoard();
+        playerBoard.setBattleships(battleships);
         Cell cell = new Cell("A1");
         ShotResult result = playerBoard.getShotResult(cell);
         playerBoard.shotCell(result, cell);
@@ -66,7 +68,8 @@ class PlayerBoardTest {
 
     @Test
     void shotOneCellAndKill() {
-        PlayerBoard playerBoard = new PlayerBoard(battleships);
+        PlayerBoard playerBoard = new PlayerBoard();
+        playerBoard.setBattleships(battleships);
         Cell cell = new Cell(6, 2);
         ShotResult result = playerBoard.getShotResult(cell);
         playerBoard.shotCell(result, cell);

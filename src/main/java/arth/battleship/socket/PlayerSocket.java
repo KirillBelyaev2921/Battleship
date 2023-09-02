@@ -3,6 +3,7 @@ package arth.battleship.socket;
 import arth.battleship.constants.CommandLine;
 import arth.battleship.constants.ShotResult;
 import arth.battleship.controller.BattleshipController;
+import arth.battleship.controller.EnemyConnectionController;
 import arth.battleship.model.Cell;
 
 import java.io.*;
@@ -13,7 +14,7 @@ import java.util.concurrent.Executors;
 
 import static arth.battleship.constants.CommandLine.*;
 
-public class PlayerSocket {
+public class PlayerSocket implements EnemyConnectionController {
 
     private BattleshipController controller;
     private ObjectInputStream reader;
@@ -63,10 +64,6 @@ public class PlayerSocket {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public void setController(BattleshipController gameController) {
-        this.controller = gameController;
     }
 
     public class IncomingReader implements Runnable {

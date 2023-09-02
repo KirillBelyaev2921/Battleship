@@ -46,7 +46,8 @@ class GameTest {
     void setShotEnemyResult() {
         EnemyBoard enemyBoard = new EnemyBoard();
 
-        PlayerBoard enemyPlayerBoard = new PlayerBoard(enemyBattleships);
+        PlayerBoard enemyPlayerBoard = new PlayerBoard();
+        enemyPlayerBoard.setBattleships(enemyBattleships);
 
         Cell playerShot = new Cell(0, 0);
         ShotResult shotResult = enemyPlayerBoard.getShotResult(playerShot);
@@ -61,7 +62,8 @@ class GameTest {
 
     @Test
     void setShotPlayerResult() {
-        PlayerBoard playerBoard = new PlayerBoard(playerBattleships);
+        PlayerBoard playerBoard = new PlayerBoard();
+        playerBoard.setBattleships(playerBattleships);
 
         Cell enemyShot = new Cell(6, 2);
 

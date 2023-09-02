@@ -4,9 +4,17 @@ import arth.battleship.constants.CellStatus;
 import arth.battleship.constants.ShotResult;
 import arth.battleship.observers.EnemyBoardObserver;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class EnemyBoard extends Board {
-    private EnemyBoardObserver observer;
+    private List<EnemyBoardObserver> observers;
+
+    public EnemyBoard() {
+        this.observers = new ArrayList<>();
+    }
+
     @Override
     public void shotCell(ShotResult result, Cell cell) {
         if (result == ShotResult.MISS)
@@ -19,11 +27,11 @@ public class EnemyBoard extends Board {
 
     @Override
     public void notifyObservers(Cell cell, CellStatus cellStatus) {
-        observer.update(cell, cellStatus);
+        observers.forEach(o -> o.update(cell, cellStatus));
     }
 
     @Override
     public void registerObserver(EnemyBoardObserver o) {
-        this.observer = o;
+        this.observers.add(o);
     }
 }

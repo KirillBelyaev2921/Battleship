@@ -1,15 +1,11 @@
 package arth.battleship.gui.main_panel;
 
-import arth.battleship.constants.ShotResult;
 import arth.battleship.controller.BattleshipController;
 import arth.battleship.gui.board.BoardPanel;
 import arth.battleship.gui.board.EnemyBoardPanel;
 import arth.battleship.gui.board.PlayerBoardPanel;
-import arth.battleship.model.Cell;
-import arth.battleship.observers.EnemyBoardObserver;
 
 import javax.swing.*;
-import java.util.ArrayList;
 
 public class BattleshipGamePanel extends MainPanel {
     private final BattleshipController controller;

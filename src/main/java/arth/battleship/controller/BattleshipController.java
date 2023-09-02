@@ -14,7 +14,7 @@ import java.util.List;
 public class BattleshipController {
     private final BattleshipFrame frame;
     private FrameState state;
-    private PlayerSocket connection;
+    private EnemyConnectionController connection;
 
     public BattleshipController() {
         this.frame = new BattleshipFrame(this);
@@ -90,7 +90,7 @@ public class BattleshipController {
         return new GameState(this, battleships);
     }
 
-    public PlayerSocket getConnection() {
+    public EnemyConnectionController getConnection() {
         return connection;
     }
 

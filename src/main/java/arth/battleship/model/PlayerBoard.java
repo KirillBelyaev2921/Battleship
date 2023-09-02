@@ -4,15 +4,17 @@ import arth.battleship.constants.CellStatus;
 import arth.battleship.constants.ShotResult;
 import arth.battleship.observers.PlayerBoardObserver;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public class PlayerBoard extends Board {
     private List<Battleship> battleships;
-    private PlayerBoardObserver observer;
+    private List<PlayerBoardObserver> observers;
 
     public PlayerBoard() {
         super();
+        observers = new ArrayList<>();
     }
 
     @Override
@@ -49,12 +51,12 @@ public class PlayerBoard extends Board {
 
     @Override
     public void notifyObservers(Cell cell, CellStatus cellStatus) {
-        observer.update(cell, cellStatus);
+        observers.forEach(o -> o.update(cell, cellStatus));
     }
 
     @Override
     public void registerObserver(PlayerBoardObserver o) {
-        this.observer = o;
+        this.observers.add(o);
     }
 
     public void setBattleships(List<Battleship> battleships) {

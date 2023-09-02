@@ -8,9 +8,6 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 
-import static arth.battleship.constants.CellStatus.HIT;
-import static arth.battleship.constants.CellStatus.KILL;
-
 public class EnemyBattleshipCellPanel extends BattleshipCellPanel {
 
     public EnemyBattleshipCellPanel(Cell cell) {

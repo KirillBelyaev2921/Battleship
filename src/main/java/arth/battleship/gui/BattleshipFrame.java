@@ -1,10 +1,7 @@
 package arth.battleship.gui;
 
 import arth.battleship.controller.BattleshipController;
-import arth.battleship.gui.main_panel.BattleshipGamePanel;
-import arth.battleship.gui.main_panel.MainMenuPanel;
 import arth.battleship.gui.main_panel.MainPanel;
-import arth.battleship.gui.main_panel.PlaceBattleshipsPanel;
 
 import javax.swing.*;
 
@@ -34,5 +31,7 @@ public class BattleshipFrame extends JFrame {
     public void displayMessage(String[] message) {
         mainPanel.displayMessage(message);
     }
+
+
 
 }

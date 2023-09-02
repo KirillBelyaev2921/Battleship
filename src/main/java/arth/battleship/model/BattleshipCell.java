@@ -4,6 +4,7 @@ import arth.battleship.constants.CellStatus;
 
 public class BattleshipCell extends Cell {
     private CellStatus status;
+
     public BattleshipCell(int i, int j) throws IndexOutOfBoundsException, NumberFormatException {
         super(i, j);
         status = CellStatus.EMPTY;

@@ -161,11 +161,10 @@ public class BattleshipsBuilder {
             throw new InvalidNumberOfShipsOfOneSizeException();
         }
 
-//        return battleshipsSizesCount.get(1) == 4 &&
-//                battleshipsSizesCount.get(2) == 3 &&
-//                battleshipsSizesCount.get(3) == 2 &&
-//                battleshipsSizesCount.get(4) == 1;
-        return battleshipsSizesCount.get(1) == 1;
+        return battleshipsSizesCount.get(1) == 4 &&
+                battleshipsSizesCount.get(2) == 3 &&
+                battleshipsSizesCount.get(3) == 2 &&
+                battleshipsSizesCount.get(4) == 1;
     }
 
     public List<Battleship> build() {

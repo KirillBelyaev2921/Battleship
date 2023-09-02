@@ -42,6 +42,7 @@ public class Game {
     public void setPlayerTurn(boolean playerTurn) {
         isPlayerTurn = playerTurn;
     }
+
     public void registerObserver(PlayerBoardObserver o) {
         playerBoard.registerObserver(o);
     }
