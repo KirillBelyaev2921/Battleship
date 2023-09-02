@@ -3,6 +3,8 @@ out/
 target/
 !**/src/main/**/out/
 !**/src/test/**/out/
+jar/battleship.xml
+jar/launch4j.log
 
 ### Eclipse ###
 .apt_generated
