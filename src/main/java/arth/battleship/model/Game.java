@@ -17,11 +17,11 @@ public class Game {
         this.enemyBoard = enemyBoard;
     }
 
-    public void setShotEnemyResult(ShotResult result, Cell cell) {
+    public void shotEnemyCell(ShotResult result, Cell cell) {
         enemyBoard.shotCell(result, cell);
     }
 
-    public ShotResult getResultAndShotPlayer(Cell cell) {
+    public ShotResult shotPlayerCell(Cell cell) {
         ShotResult result = playerBoard.getShotResult(cell);
         playerBoard.shotCell(result, cell);
         return result;
@@ -51,7 +51,7 @@ public class Game {
         enemyBoard.registerObserver(o);
     }
 
-    public void setBattleships(List<Battleship> battleships) {
+    public void setPlayerBattleships(List<Battleship> battleships) {
         playerBoard.setBattleships(battleships);
     }
 }

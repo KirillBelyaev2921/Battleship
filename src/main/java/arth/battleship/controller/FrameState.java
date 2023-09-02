@@ -38,7 +38,7 @@ public abstract class FrameState {
         return null;
     }
 
-    public void shotEnemyResult(ShotResult readObject) {
+    public void shotEnemyResult(ShotResult result) {
     }
 
     public void registerObserver(PlayerBoardObserver o) {
@@ -51,7 +51,7 @@ public abstract class FrameState {
         return false;
     }
 
-    public void shotShip() {
+    public void shotEnemyCell() {
     }
 
     public void goBack() {

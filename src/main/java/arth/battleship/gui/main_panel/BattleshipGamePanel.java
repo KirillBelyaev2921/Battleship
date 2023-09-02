@@ -37,7 +37,7 @@ public class BattleshipGamePanel extends MainPanel {
         boards.add(enemyBoardPanel);
 
         shootButton = new JButton("Shoot");
-        shootButton.addActionListener(e -> controller.shotShip());
+        shootButton.addActionListener(e -> controller.shotEnemyCell());
     }
 
     private void addComponentsToPanel() {

@@ -24,7 +24,7 @@ public class GameState extends FrameState {
 
     @Override
     public void setBattleships(boolean isTurn) {
-        game.setBattleships(battleships);
+        game.setPlayerBattleships(battleships);
         setTurn("Game Start", isTurn);
     }
 
@@ -42,15 +42,15 @@ public class GameState extends FrameState {
     }
 
     @Override
-    public void shotShip() {
+    public void shotEnemyCell() {
         if (selectedCell != null) {
-            getController().getConnection().shootShip(selectedCell);
+            getController().getConnection().shotEnemyCell(selectedCell);
         }
     }
 
     @Override
     public ShotResult shotPlayer(Cell cell) {
-        ShotResult result = game.getResultAndShotPlayer(cell);
+        ShotResult result = game.shotPlayerCell(cell);
         if (result == ShotResult.END) {
             setTurn("You Lose", false);
             return result;
@@ -61,7 +61,7 @@ public class GameState extends FrameState {
 
     @Override
     public void shotEnemyResult(ShotResult result) {
-        game.setShotEnemyResult(result, selectedCell);
+        game.shotEnemyCell(result, selectedCell);
         if (result != ShotResult.END) {
             setTurn("You " + result.toString(), result != ShotResult.MISS);
         } else {

@@ -48,7 +48,7 @@ public class PlayerSocket implements EnemyConnectionController {
             throw new RuntimeException(e);
         }
     }
-    public void shootShip(Cell cell) {
+    public void shotEnemyCell(Cell cell) {
         try {
             writer.writeObject(SHOT);
             writer.writeObject(cell);

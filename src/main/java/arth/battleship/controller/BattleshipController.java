@@ -7,7 +7,6 @@ import arth.battleship.model.Battleship;
 import arth.battleship.model.Cell;
 import arth.battleship.observers.EnemyBoardObserver;
 import arth.battleship.observers.PlayerBoardObserver;
-import arth.battleship.socket.PlayerSocket;
 
 import java.util.List;
 
@@ -39,9 +38,12 @@ public class BattleshipController {
     public void setReady(boolean isReady) {
         state.setReady(isReady);
     }
-    public void shotShip() {
-        state.shotShip();
+    public void shotEnemyCell() {
+        state.shotEnemyCell();
     }
+    /* TODO
+        return boolean, remove SELECTED state. Observer will not control selecting cell, only view (or controller).
+     */
     public void selectEnemyCell(Cell cell) {
         state.selectEnemyCell(cell);
     }
@@ -61,8 +63,8 @@ public class BattleshipController {
         return state.shotPlayer(cell);
     }
 
-    public void shotEnemyResult(ShotResult readObject) {
-        state.shotEnemyResult(readObject);
+    public void shotEnemyResult(ShotResult result) {
+        state.shotEnemyResult(result);
     }
 
     public void displayMessage(String... message) {
@@ -86,7 +88,6 @@ public class BattleshipController {
     }
 
     public GameState getGameState(List<Battleship> battleships) {
-
         return new GameState(this, battleships);
     }
 
@@ -94,7 +95,7 @@ public class BattleshipController {
         return connection;
     }
 
-    public void setConnection(PlayerSocket connection) {
+    public void setConnection(EnemyConnectionController connection) {
         this.connection = connection;
     }
 

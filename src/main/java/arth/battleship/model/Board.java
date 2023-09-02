@@ -41,7 +41,7 @@ public abstract class Board {
 
     public abstract void shotCell(ShotResult result, Cell cell);
 
-    void sinkBattleship(int i, int j) {
+    protected void sinkBattleship(int i, int j) {
         if (i < 0 || j < 0 || i >= BOARD_SIZE || j >= BOARD_SIZE)
             return;
         BattleshipCell cell = getCell(new Cell(i, j));
